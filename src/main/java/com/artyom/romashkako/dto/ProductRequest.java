@@ -10,18 +10,14 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Getter
 @Setter
-@Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ProductRequest {
     @Size(max = 255, message = "Title should not be more than 255")
-    @NotEmpty(message = "Title has not be empty")
-    @NotBlank(message = "Title has not be blank")
+    @NotBlank(message = "Title has not be empty")
     private String title;
     @Size(max = 4096, message = "Description should not be more than 4096")
     private String description;
     @DecimalMin(value = "0.0", inclusive = false)
-    @Builder.Default
     private BigDecimal price = BigDecimal.ZERO;
-    @Builder.Default
     private boolean isAvailable = false;
 }

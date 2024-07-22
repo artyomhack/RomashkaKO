@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @EqualsAndHashCode
-@Builder
 public class Product {
     private Integer id;
     private String title;

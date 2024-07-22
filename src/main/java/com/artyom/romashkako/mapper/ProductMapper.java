@@ -18,7 +18,7 @@ public class ProductMapper {
         );
     }
 
-    public ProductResponse response(Product product) {
+    public ProductResponse getProductResponse(Product product) {
         return new ProductResponse(
                 product.getId(),
                 product.getTitle(),

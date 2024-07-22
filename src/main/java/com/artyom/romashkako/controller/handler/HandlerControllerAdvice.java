@@ -1,47 +1,47 @@
 package com.artyom.romashkako.controller.handler;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ProblemDetail;
-import org.springframework.http.ResponseEntity;
+import com.artyom.romashkako.dto.ErrorResponse;
+import com.artyom.romashkako.exceptions.InternalServerError;
+import com.artyom.romashkako.exceptions.NotFoundException;
+import com.artyom.romashkako.exceptions.ValidationException;
+import com.artyom.romashkako.mapper.ValidationExceptionMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindException;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
-@ControllerAdvice
+@RestControllerAdvice
+@RequiredArgsConstructor
 public class HandlerControllerAdvice {
 
-    @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<ProblemDetail> handlerNoSuchElementException(NoSuchElementException e) {
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
-                HttpStatus.NOT_FOUND,
-                "Элемент не найден"
-        );
-        problemDetail.setProperty("elementNotFound", e.getMessage());
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problemDetail);
-    }
+    private final ValidationExceptionMapper mapper;
 
     @ExceptionHandler(BindException.class)
-    public ResponseEntity<ProblemDetail> handleBindException(BindException e) {
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,
-                "Неверная отправка данных");
-
-        List<FieldError> fieldErrorList = e.getFieldErrors();
-
-        Map<String, List<String>> bodyReqException = fieldErrorList.stream()
-                .collect(Collectors.groupingBy(
-                        FieldError::getField,
-                        Collectors.mapping(FieldError::getDefaultMessage, Collectors.toList())
-                ));
-
-        problemDetail.setProperty("bodyReqException", bodyReqException);
-        return ResponseEntity.badRequest().body(problemDetail);
+    public ErrorResponse handleBindException(BindException exception) {
+        ValidationException valException = mapper.getValidationException(exception);
+        return new ErrorResponse(
+                valException.getStatus(),
+                valException.getMessage(),
+                valException.getErrors()
+        );
     }
 
+    @ExceptionHandler(NoSuchElementException.class)
+    public ErrorResponse handleNoSuchElementException(NoSuchElementException ex) {
+        NotFoundException notFoundException = new NotFoundException(ex.getMessage());
+        return new ErrorResponse(
+                notFoundException.getStatus(),
+                notFoundException.getMessage()
+        );
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ErrorResponse handleNotFoundException(NotFoundException ex) {
+        return new ErrorResponse(
+                ex.getStatus(),
+                ex.getMessage()
+        );
+    }
 }
