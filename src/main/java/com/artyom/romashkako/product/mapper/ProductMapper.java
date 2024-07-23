@@ -5,6 +5,8 @@ import com.artyom.romashkako.product.dto.ProductResponse;
 import com.artyom.romashkako.product.model.Product;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+
 @Component
 public class ProductMapper {
 
@@ -15,6 +17,16 @@ public class ProductMapper {
                 request.getDescription(),
                 request.getPrice(),
                 request.isAvailable()
+        );
+    }
+
+    public Product getProduct(ProductResponse response) {
+        return new Product(
+                response.id(),
+                response.title(),
+                response.description(),
+                new BigDecimal(response.price()),
+                response.isAvailable()
         );
     }
 
@@ -35,5 +47,4 @@ public class ProductMapper {
         product.setAvailable(request.isAvailable());
         return product;
     }
-
 }

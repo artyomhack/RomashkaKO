@@ -5,6 +5,7 @@ import com.artyom.romashkako.common.exception.NotFoundException;
 import com.artyom.romashkako.common.exception.ValidationException;
 import com.artyom.romashkako.common.mapper.ValidationExceptionMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -12,10 +13,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.NoSuchElementException;
 
 @RestControllerAdvice
-@RequiredArgsConstructor
 public class AdviceController {
 
-    private final ValidationExceptionMapper mapper;
+    @Autowired
+    private ValidationExceptionMapper mapper;
 
     @ExceptionHandler(BindException.class)
     public ErrorResponse handleBindException(BindException exception) {

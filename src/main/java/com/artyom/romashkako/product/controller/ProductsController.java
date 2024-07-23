@@ -4,7 +4,7 @@ import com.artyom.romashkako.product.dto.ProductResponse;
 import com.artyom.romashkako.product.dto.ProductRequest;
 import com.artyom.romashkako.product.service.ProductService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -14,18 +14,21 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/product")
-@RequiredArgsConstructor
 public class ProductsController {
 
-    private final ProductService productService;
+    @Autowired
+    private ProductService productService;
 
     @PostMapping
     public ResponseEntity<ProductResponse> create(@RequestBody @Valid ProductRequest request,
                                                   UriComponentsBuilder uriBuilder) {
         ProductResponse info = productService.create(request);
         return ResponseEntity
-                .created(uriBuilder.replacePath("/api/v1/product?id={id}")
-                        .build(Map.of("id", info.id())))
+                .created(uriBuilder.replacePath("/api/v1/product")
+                        .queryParam("id", info.id())
+                        .build()
+                        .toUri()
+                )
                 .body(info);
     }
 
@@ -41,7 +44,7 @@ public class ProductsController {
     }
 
     @GetMapping("/list")
-    public List<ProductResponse> products() {
+    public List<ProductResponse> fetchAllProducts() {
         return productService.fetchAll();
     }
 
