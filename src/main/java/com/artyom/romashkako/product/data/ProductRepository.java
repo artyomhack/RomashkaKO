@@ -1,4 +1,4 @@
-package com.artyom.romashkako.product.data.repository;
+package com.artyom.romashkako.product.data;
 
 import com.artyom.romashkako.product.model.Product;
 
@@ -9,5 +9,5 @@ public interface ProductRepository {
     Product save(Product entity);
     List<Product> findAll();
     Optional<Product> findById(Integer id);
-    void deleteById(Integer id);
+    boolean deleteById(Integer id);
 }

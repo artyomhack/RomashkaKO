@@ -1,9 +1,9 @@
 package com.artyom.romashkako.common.controller;
 
-import com.artyom.romashkako.common.exception.dto.ErrorResponse;
+import com.artyom.romashkako.common.dto.ErrorResponse;
 import com.artyom.romashkako.common.exception.NotFoundException;
 import com.artyom.romashkako.common.exception.ValidationException;
-import com.artyom.romashkako.common.exception.mapper.ValidationExceptionMapper;
+import com.artyom.romashkako.common.mapper.ValidationExceptionMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
 
 @RestControllerAdvice
 @RequiredArgsConstructor
-public class HandlerControllerAdvice {
+public class AdviceController {
 
     private final ValidationExceptionMapper mapper;
 

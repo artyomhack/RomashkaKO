@@ -1,6 +1,6 @@
 package com.artyom.romashkako.product.service;
 
-import com.artyom.romashkako.product.data.repository.InMemoryProductRepository;
+import com.artyom.romashkako.product.data.InMemoryProductRepository;
 import com.artyom.romashkako.product.dto.ProductRequest;
 import com.artyom.romashkako.product.dto.ProductResponse;
 import com.artyom.romashkako.common.exception.NotFoundException;
@@ -46,6 +46,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteById(Integer id) {
-        inMemoryProductRepository.deleteById(id);
+        if (!inMemoryProductRepository.deleteById(id)) {
+            throw new NotFoundException("Product by id " + id + " not found.");
+        }
     }
 }

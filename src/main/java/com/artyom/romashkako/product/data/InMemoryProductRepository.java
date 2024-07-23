@@ -1,4 +1,4 @@
-package com.artyom.romashkako.product.data.repository;
+package com.artyom.romashkako.product.data;
 
 import com.artyom.romashkako.product.model.Product;
 import lombok.RequiredArgsConstructor;
@@ -46,9 +46,10 @@ public class InMemoryProductRepository implements ProductRepository {
     }
 
     @Override
-    public void deleteById(Integer id) {
+    public boolean deleteById(Integer id) {
         if (isValidId(id)) {
             flowers.remove(id - 1);
+            return true;
         } else {
             throw new NoSuchElementException("Product by id [" + id + "] not found.");
         }

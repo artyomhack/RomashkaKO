@@ -29,7 +29,7 @@ public class ProductsController {
                 .body(info);
     }
 
-    @PutMapping("/edit/{id}")
+    @PatchMapping("/{id}")
     public ProductResponse editProductById(@PathVariable Integer id,
                                            @RequestBody @Valid ProductRequest request) {
         return productService.updateById(request, id);
@@ -45,7 +45,7 @@ public class ProductsController {
         return productService.fetchAll();
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public void deleteProductById(@PathVariable Integer id) {
         productService.deleteById(id);
     }

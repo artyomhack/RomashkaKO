@@ -1,4 +1,4 @@
-package com.artyom.romashkako.common.exception.mapper;
+package com.artyom.romashkako.common.mapper;
 
 import com.artyom.romashkako.common.exception.ValidationException;
 import org.springframework.http.HttpStatus;

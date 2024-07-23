@@ -1,4 +1,4 @@
-package com.artyom.romashkako.common.exception.dto;
+package com.artyom.romashkako.common.dto;
 
 import lombok.Getter;
 import lombok.Setter;
