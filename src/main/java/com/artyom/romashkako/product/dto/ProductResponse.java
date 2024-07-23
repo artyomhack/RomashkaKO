@@ -1,4 +1,4 @@
-package com.artyom.romashkako.dto;
+package com.artyom.romashkako.product.dto;
 
 public record ProductResponse(
         Integer id,

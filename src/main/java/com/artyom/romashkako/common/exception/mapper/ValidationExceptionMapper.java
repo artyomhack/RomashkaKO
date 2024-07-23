@@ -1,6 +1,7 @@
-package com.artyom.romashkako.mapper;
+package com.artyom.romashkako.common.exception.mapper;
 
-import com.artyom.romashkako.exceptions.ValidationException;
+import com.artyom.romashkako.common.exception.ValidationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
@@ -18,7 +19,7 @@ public class ValidationExceptionMapper {
                         FieldError::getField,
                         FieldError::getDefaultMessage
                 ));
-        return new ValidationException(bindException.getMessage(), errors);
+        return new ValidationException(errors);
     }
 
 }

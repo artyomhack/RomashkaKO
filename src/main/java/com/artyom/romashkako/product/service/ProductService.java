@@ -1,7 +1,7 @@
-package com.artyom.romashkako.service;
+package com.artyom.romashkako.product.service;
 
-import com.artyom.romashkako.dto.ProductRequest;
-import com.artyom.romashkako.dto.ProductResponse;
+import com.artyom.romashkako.product.dto.ProductRequest;
+import com.artyom.romashkako.product.dto.ProductResponse;
 
 import java.util.List;
 

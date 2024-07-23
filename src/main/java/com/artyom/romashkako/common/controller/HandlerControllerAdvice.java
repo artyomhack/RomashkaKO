@@ -1,10 +1,9 @@
-package com.artyom.romashkako.controller.handler;
+package com.artyom.romashkako.common.controller;
 
-import com.artyom.romashkako.dto.ErrorResponse;
-import com.artyom.romashkako.exceptions.InternalServerError;
-import com.artyom.romashkako.exceptions.NotFoundException;
-import com.artyom.romashkako.exceptions.ValidationException;
-import com.artyom.romashkako.mapper.ValidationExceptionMapper;
+import com.artyom.romashkako.common.exception.dto.ErrorResponse;
+import com.artyom.romashkako.common.exception.NotFoundException;
+import com.artyom.romashkako.common.exception.ValidationException;
+import com.artyom.romashkako.common.exception.mapper.ValidationExceptionMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;

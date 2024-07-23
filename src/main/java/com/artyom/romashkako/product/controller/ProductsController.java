@@ -1,13 +1,11 @@
-package com.artyom.romashkako.controller;
+package com.artyom.romashkako.product.controller;
 
-import com.artyom.romashkako.dto.ProductResponse;
-import com.artyom.romashkako.dto.ProductRequest;
-import com.artyom.romashkako.service.ProductService;
+import com.artyom.romashkako.product.dto.ProductResponse;
+import com.artyom.romashkako.product.dto.ProductRequest;
+import com.artyom.romashkako.product.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindException;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -31,14 +29,14 @@ public class ProductsController {
                 .body(info);
     }
 
-    @PutMapping("/edit")
-    public ProductResponse editProductById(@RequestParam Integer id,
+    @PutMapping("/edit/{id}")
+    public ProductResponse editProductById(@PathVariable Integer id,
                                            @RequestBody @Valid ProductRequest request) {
         return productService.updateById(request, id);
     }
 
-    @GetMapping
-    public ProductResponse fetchProductById(@RequestParam(required = false) Integer id) {
+    @GetMapping("/{id}")
+    public ProductResponse fetchProductById(@PathVariable Integer id) {
         return productService.findById(id);
     }
 
@@ -47,8 +45,8 @@ public class ProductsController {
         return productService.fetchAll();
     }
 
-    @DeleteMapping
-    public void deleteProductById(@RequestParam(required = false) Integer id) {
+    @DeleteMapping("/delete/{id}")
+    public void deleteProductById(@PathVariable Integer id) {
         productService.deleteById(id);
     }
 }

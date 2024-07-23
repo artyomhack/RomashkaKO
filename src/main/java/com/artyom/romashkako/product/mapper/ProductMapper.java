@@ -1,8 +1,8 @@
-package com.artyom.romashkako.mapper;
+package com.artyom.romashkako.product.mapper;
 
-import com.artyom.romashkako.dto.ProductRequest;
-import com.artyom.romashkako.dto.ProductResponse;
-import com.artyom.romashkako.model.Product;
+import com.artyom.romashkako.product.dto.ProductRequest;
+import com.artyom.romashkako.product.dto.ProductResponse;
+import com.artyom.romashkako.product.model.Product;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -26,6 +26,14 @@ public class ProductMapper {
                 product.getPrice().toPlainString(),
                 product.isAvailable()
         );
+    }
+
+    public Product mergeProduct(Product product, ProductRequest request) {
+        product.setTitle(request.getTitle());
+        product.setDescription(request.getDescription());
+        product.setPrice(request.getPrice());
+        product.setAvailable(request.isAvailable());
+        return product;
     }
 
 }

@@ -1,4 +1,4 @@
-package com.artyom.romashkako.dto;
+package com.artyom.romashkako.product.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.*;

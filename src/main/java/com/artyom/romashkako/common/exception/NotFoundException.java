@@ -1,4 +1,4 @@
-package com.artyom.romashkako.exceptions;
+package com.artyom.romashkako.common.exception;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

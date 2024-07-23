@@ -1,6 +1,5 @@
-package com.artyom.romashkako.model;
+package com.artyom.romashkako.product.model;
 
-import com.artyom.romashkako.dto.ProductRequest;
 import lombok.*;
 
 import java.math.BigDecimal;
