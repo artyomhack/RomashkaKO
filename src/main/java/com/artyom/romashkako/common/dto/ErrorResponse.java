@@ -10,17 +10,16 @@ import java.util.Map;
 @Setter
 public class ErrorResponse {
     private int code;
-    private HttpStatus status;
+    private String status;
     private String message;
     private Map<String, String> errors;
 
     public ErrorResponse(HttpStatus status, String message) {
         this(status, message, null);
-        this.code = status.value();
     }
 
     public ErrorResponse(HttpStatus status, String message, Map<String, String> errors) {
-        this.status = status;
+        this.status = status.name();
         this.message = message;
         this.errors = errors;
         this.code = status.value();

@@ -13,8 +13,8 @@ public class RestException extends RuntimeException {
 
     public RestException(HttpStatus status, String message) {
         super(message);
+        this.code = status.value();
         this.status = status;
         this.message = message;
-        this.code = status.value();
     }
 }
