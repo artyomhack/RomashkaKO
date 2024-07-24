@@ -25,7 +25,7 @@ public class ProductMapper {
                 response.id(),
                 response.title(),
                 response.description(),
-                new BigDecimal(response.price()),
+                Double.parseDouble(response.price()),
                 response.isAvailable()
         );
     }
@@ -35,7 +35,7 @@ public class ProductMapper {
                 product.getId(),
                 product.getTitle(),
                 product.getDescription(),
-                product.getPrice().toPlainString(),
+                String.valueOf(product.getPrice()),
                 product.isAvailable()
         );
     }

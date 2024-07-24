@@ -21,15 +21,15 @@ import static org.mockito.Mockito.doReturn;
 class InMemoryProductRepositoryTest {
 
     private static final Product PRODUCT = new Product(null, "Роза", "Красный цветок с шипами",
-            BigDecimal.valueOf(34.99), true);
+            34.99, true);
 
     private static final List<Product> PRODUCT_LIST = new ArrayList<>(List.of(
-            new Product(1, "Роза", "Красный цветок с шипами", BigDecimal.valueOf(34.99), true),
-            new Product(2, "Тюльпан", "Весенний цветок различных оттенков", BigDecimal.valueOf(20.99), true),
-            new Product(3, "Гвоздика", "Цветок с гофрированными лепестками", BigDecimal.valueOf(20.99), false),
-            new Product(4, "Пионы", "Крупный цветок с пышными лепестками", BigDecimal.valueOf(29.99), true),
-            new Product(5, "Лилии", "Элегантный цветок с сильным ароматом", BigDecimal.valueOf(25.99), false),
-            new Product(6, "Ромашка", "Маленький белый цветок с желтой серединкой", BigDecimal.valueOf(5.99), true)
+            new Product(1, "Роза", "Красный цветок с шипами", 34.99, true),
+            new Product(2, "Тюльпан", "Весенний цветок различных оттенков", 20.99, true),
+            new Product(3, "Гвоздика", "Цветок с гофрированными лепестками", 20.99, false),
+            new Product(4, "Пионы", "Крупный цветок с пышными лепестками", 29.99, true),
+            new Product(5, "Лилии", "Элегантный цветок с сильным ароматом", 25.99, false),
+            new Product(6, "Ромашка", "Маленький белый цветок с желтой серединкой", 5.99, true)
     ));
 
     @Autowired

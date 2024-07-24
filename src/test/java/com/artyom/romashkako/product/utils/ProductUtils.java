@@ -2,18 +2,23 @@ package com.artyom.romashkako.product.utils;
 
 import com.artyom.romashkako.product.data.ProductRepository;
 import com.artyom.romashkako.product.dto.ProductRequest;
+import com.artyom.romashkako.product.dto.ProductResponse;
 import com.artyom.romashkako.product.model.Product;
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestComponent;
+import org.springframework.test.web.servlet.ResultActions;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @TestComponent
 public class ProductUtils {
 
-    private final static Random RANDOM = new Random();
+    final static Random RANDOM = new Random();
 
     @Autowired
     private ProductRepository productRepository;
@@ -23,7 +28,7 @@ public class ProductUtils {
     }
 
     public Product createRandomProduct(String title) {
-        return productRepository.save(getRandomProduct(null));
+        return productRepository.save(getRandomProduct(title));
     }
 
     public Product getRandomProduct() {
@@ -34,12 +39,12 @@ public class ProductUtils {
         return getRandomProduct(title, null, null, null);
     }
 
-    public Product getRandomProduct(String title, String description, BigDecimal price, Boolean isAvailable) {
+    public Product getRandomProduct(String title, String description, Double price, Boolean isAvailable) {
         return new Product(
                 null,
-                Objects.requireNonNullElse(title, "name_" + UUID.randomUUID()),
+                Objects.requireNonNullElse(title, "title_" + UUID.randomUUID()),
                 Objects.requireNonNullElse(description, "description_" + UUID.randomUUID()),
-                Objects.requireNonNullElse(price, BigDecimal.valueOf(RANDOM.nextDouble())),
+                Objects.requireNonNullElse(price, RANDOM.nextDouble()),
                 Objects.requireNonNullElse(isAvailable, RANDOM.nextBoolean())
         );
     }
@@ -51,6 +56,29 @@ public class ProductUtils {
                 product.getPrice(),
                 product.isAvailable()
         );
+    }
+
+    public String getRandomString(int length) {
+        return getRandomString(null, length);
+    }
+
+    public String getRandomString(String prefix, int length) {
+        byte[] array = new byte[length];
+        new Random().nextBytes(array);
+        var prefixNN = Objects.requireNonNullElse(prefix, "");
+        return prefixNN + new String(array, StandardCharsets.US_ASCII);
+    }
+
+    public <T> T readJson(ResultActions actions, Class<T> t) {
+        try {
+            var json = actions.andReturn()
+                    .getResponse()
+                    .getContentAsString(StandardCharsets.UTF_8);
+
+            return new ObjectMapper().readValue(json, t);
+        } catch (UnsupportedEncodingException | JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
 
