@@ -1,11 +1,13 @@
 package com.artyom.romashkako.common.dto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
 import java.util.Map;
 
+@NoArgsConstructor
 @Getter
 @Setter
 public class ErrorResponse {

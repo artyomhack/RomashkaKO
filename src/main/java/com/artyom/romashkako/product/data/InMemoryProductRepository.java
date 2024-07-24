@@ -23,7 +23,7 @@ public class InMemoryProductRepository implements ProductRepository {
                 .keySet()
                 .stream()
                 .max(Comparator.naturalOrder())
-                .orElse(0) + 1;
+                .orElse(1);
     }
 
     @Override

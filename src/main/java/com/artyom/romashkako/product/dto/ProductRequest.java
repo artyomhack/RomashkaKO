@@ -17,7 +17,7 @@ public class ProductRequest {
     private String title;
     @Size(max = 4096, message = "Description should not be more than 4096")
     private String description;
-    @DecimalMin(value = "0.0", inclusive = false)
+    @DecimalMin(value = "0.0", inclusive = false, message = "Prices can`t be less than 0")
     private BigDecimal price = BigDecimal.ZERO;
     private boolean isAvailable = false;
 }
