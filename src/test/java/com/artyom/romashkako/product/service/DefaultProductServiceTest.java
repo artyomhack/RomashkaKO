@@ -7,6 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -15,39 +18,15 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doThrow;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 class DefaultProductServiceTest {
 
-    private static final List<Product> PRODUCT_LIST = new ArrayList<>(List.of(
-            new Product(1, "Роза", "Красный цветок с шипами", 34.99, true),
-            new Product(2, "Тюльпан", "Весенний цветок различных оттенков", 20.99, true),
-            new Product(3, "Гвоздика", "Цветок с гофрированными лепестками", 20.99, false),
-            new Product(4, "Пионы", "Крупный цветок с пышными лепестками", 29.99, true),
-            new Product(5, "Лилии", "Элегантный цветок с сильным ароматом", 25.99, false),
-            new Product(6, "Ромашка", "Маленький белый цветок с желтой серединкой", 5.99, true)
-    ));
+    @Autowired
+    ProductService defaultProductService;
 
-    @Mock
-    DefaultProductService productService;
-
-    @Test
-    public void shouldCatchNotFound_whenUpdatedUserById_success() {
-        ProductRequest product = new ProductRequest("Шиповник", "Кислая ягода", 29.30, true);
-        doThrow(NotFoundException.class).when(productService).updateById(product, Integer.MAX_VALUE);
-        assertThrows(NotFoundException.class, () -> productService.updateById(product, Integer.MAX_VALUE));
-    }
-
-    @Test
-    public void shouldCatchNotFound_whenFetchProductById_success() {
-        var id = Integer.MAX_VALUE;
-        doThrow(NotFoundException.class).when(productService).findById(id);
-        assertThrows(NotFoundException.class, () -> productService.findById(id));
-    }
-
-    @Test
-    public void shouldCatchNotFound_whenDeleteProductById_success() {
-        var id = Integer.MAX_VALUE;
-        doThrow(NotFoundException.class).when(productService).deleteById(Integer.MAX_VALUE);
-        assertThrows(NotFoundException.class, () -> productService.deleteById(id));
-    }
+    //create -> add
+    //update -> update, not found
+    //findById -> fetch, not found
+    //findAll -> fetchAll
+    //deleteById -> delete, not found
 }

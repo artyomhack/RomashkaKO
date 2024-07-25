@@ -58,16 +58,6 @@ public class ProductUtils {
         );
     }
 
-    public String getRandomString(int length) {
-        return getRandomString(null, length);
-    }
-
-    public String getRandomString(String prefix, int length) {
-        byte[] array = new byte[length];
-        new Random().nextBytes(array);
-        var prefixNN = Objects.requireNonNullElse(prefix, "");
-        return prefixNN + new String(array, StandardCharsets.US_ASCII);
-    }
 
     public <T> T readJson(ResultActions actions, Class<T> t) {
         try {

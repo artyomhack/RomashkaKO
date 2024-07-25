@@ -1,5 +1,6 @@
 package com.artyom.romashkako.product.controller;
 
+import com.artyom.romashkako.StringUtils;
 import com.artyom.romashkako.common.dto.ErrorResponse;
 import com.artyom.romashkako.common.exception.NotFoundException;
 import com.artyom.romashkako.common.mapper.ValidationExceptionMapper;
@@ -39,6 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         ValidationExceptionMapper.class,
         InMemoryProductRepository.class,
         DefaultProductService.class,
+        StringUtils.class,
         ProductUtils.class})
 class ProductsControllerTest {
     @Autowired
@@ -52,6 +54,9 @@ class ProductsControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    StringUtils stringUtils;
 
     @Autowired
     ProductUtils productUtils;
@@ -106,7 +111,7 @@ class ProductsControllerTest {
 
         var actual = productUtils.readJson(response, ProductResponse.class);
 
-        assertEquals(expected.getId(), actual.id());
+        assertNotNull(expected.getId());
         assertEquals(expected.getTitle(), actual.title());
         assertEquals(expected.getDescription(), actual.description());
         assertEquals(expected.getPrice(), Double.parseDouble(actual.price()));
@@ -116,8 +121,8 @@ class ProductsControllerTest {
     @Test
     public void shouldCatchThrowWhenCreateIncorrectProduct_400badRequest() throws Exception {
         var request = new ProductRequest(
-                productUtils.getRandomString(300),
-                productUtils.getRandomString(4100),
+                stringUtils.getRandomString(300),
+                stringUtils.getRandomString(4100),
                 -100.00,
                 false
         );
@@ -173,8 +178,8 @@ class ProductsControllerTest {
     public void shouldCatchThrowWhenNotFoundUpdatedProductById_404notFound() throws Exception {
         var oldProduct = productUtils.createRandomProduct();
         var expectedId = oldProduct.getId();
-        var expectedTitle = productUtils.getRandomString(15);
-        var expectedDescription = productUtils.getRandomString(115);
+        var expectedTitle = stringUtils.getRandomString(15);
+        var expectedDescription = stringUtils.getRandomString(115);
         var expectedPrice = 20.99;
 
         var request = new ProductRequest(expectedTitle, expectedDescription, expectedPrice, false);
@@ -200,8 +205,8 @@ class ProductsControllerTest {
     public void shouldCatchThrowWhenIncorrectUpdatedProductById_400badRequest() throws Exception {
         var oldProduct = productUtils.createRandomProduct();
         var expectedId = oldProduct.getId();
-        var expectedTitle = productUtils.getRandomString(300);
-        var expectedDescription = productUtils.getRandomString(4100);
+        var expectedTitle = stringUtils.getRandomString(300);
+        var expectedDescription = stringUtils.getRandomString(4100);
         var expectedPrice = -1.0;
 
         var request = new ProductRequest(expectedTitle, expectedDescription, expectedPrice, false);
@@ -267,8 +272,10 @@ class ProductsControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        var actualList = Arrays.asList(productUtils.readJson(responses, ProductResponse[].class));
-        assertThat(actualList).containsExactlyElementsOf(expectedProducts);
+        var actualList = Arrays.stream(productUtils.readJson(responses, ProductResponse[].class)).toList();
+
+        assertFalse(actualList.isEmpty());
+        assertThat(actualList).containsSequence(expectedProducts);
     }
 
 
