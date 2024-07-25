@@ -65,7 +65,7 @@ class ProductsControllerTest {
 
     @Test
     public void shouldReturnProductById_200ok() throws Exception {
-        var expected = productUtils.createRandomProduct();
+        var expected = productRepository.save(productUtils.createRandomProduct());
         var response = mockMvc
                 .perform(get("/api/v1/product/" + expected.getId()))
                 .andExpect(status().isOk())
@@ -146,7 +146,7 @@ class ProductsControllerTest {
 
     @Test
     public void shouldReturnedUpdatedProductById_200ok() throws Exception {
-        var oldProduct = productUtils.createRandomProduct();
+        var oldProduct = productRepository.save(productUtils.createRandomProduct());
         var expectedId = oldProduct.getId();
         var expectedTitle = "updated_" + oldProduct.getTitle();
         var expectedDescription = "updated_" + oldProduct.getDescription();
@@ -230,7 +230,7 @@ class ProductsControllerTest {
 
     @Test
     public void shouldDeleteProductById_200ok() throws Exception {
-        var product = productUtils.createRandomProduct();
+        var product = productRepository.save(productUtils.createRandomProduct());
 
         mockMvc.perform(delete("/api/v1/product/" + product.getId()))
                 .andDo(print())

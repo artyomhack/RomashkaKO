@@ -5,7 +5,6 @@ import com.artyom.romashkako.product.dto.ProductResponse;
 import com.artyom.romashkako.product.model.Product;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 
 @Component
 public class ProductMapper {

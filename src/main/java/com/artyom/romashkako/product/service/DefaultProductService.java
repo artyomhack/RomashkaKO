@@ -19,7 +19,7 @@ public class DefaultProductService implements ProductService {
 
     @Override
     public ProductResponse create(ProductRequest request) {
-        return productMapper.getProductResponse(productRepository.save(productMapper.getProduct(request)));
+         return productMapper.getProductResponse(productRepository.save(productMapper.getProduct(request)));
     }
 
     @Override

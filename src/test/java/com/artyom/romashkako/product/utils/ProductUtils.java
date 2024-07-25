@@ -11,7 +11,6 @@ import org.springframework.boot.test.context.TestComponent;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -28,11 +27,11 @@ public class ProductUtils {
     }
 
     public Product createRandomProduct(String title) {
-        return productRepository.save(getRandomProduct(title));
+        return getRandomProduct(title);
     }
 
-    public Product getRandomProduct() {
-        return getRandomProduct(null);
+    public Product getRandomProduct(Integer id) {
+        return getRandomProduct(id, null,null, null, null);
     }
 
     public Product getRandomProduct(String title) {
@@ -40,12 +39,26 @@ public class ProductUtils {
     }
 
     public Product getRandomProduct(String title, String description, Double price, Boolean isAvailable) {
+        return getRandomProduct(null, title, null, null,false);
+    }
+
+    public Product getRandomProduct(Integer id, String title, String description, Double price, Boolean isAvailable) {
         return new Product(
-                null,
+                Objects.requireNonNullElse(id, RANDOM.nextInt()),
                 Objects.requireNonNullElse(title, "title_" + UUID.randomUUID()),
                 Objects.requireNonNullElse(description, "description_" + UUID.randomUUID()),
                 Objects.requireNonNullElse(price, RANDOM.nextDouble()),
                 Objects.requireNonNullElse(isAvailable, RANDOM.nextBoolean())
+        );
+    }
+
+    public ProductResponse getProductResponse(Product product) {
+        return new ProductResponse(
+                product.getId(),
+                product.getTitle(),
+                product.getDescription(),
+                String.valueOf(product.getPrice()),
+                product.isAvailable()
         );
     }
 
