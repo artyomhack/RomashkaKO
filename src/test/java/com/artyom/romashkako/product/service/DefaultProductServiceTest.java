@@ -21,10 +21,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
+import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith({MockitoExtension.class})
@@ -57,8 +58,7 @@ public class DefaultProductServiceTest {
 
         when(inMemoryProductRepository.findById(1)).thenReturn(Optional.empty());
         when(inMemoryProductRepository.save(product)).thenReturn(product);
-        when(productMapper.getProduct(request)).thenReturn(product);
-        when(productMapper.getProductResponse(product)).thenReturn(expectedResponse);
+        setUpMockProductMapper(product, request, expectedResponse);
 
         var result = defaultProductService.create(request);
 
@@ -90,9 +90,8 @@ public class DefaultProductServiceTest {
 
         when(inMemoryProductRepository.findById(1)).thenReturn(Optional.of(product));
         when(inMemoryProductRepository.save(updateProduct)).thenReturn(updateProduct);
-        when(productMapper.getProduct(request)).thenReturn(updateProduct);
         when(productMapper.mergeProduct(product, request)).thenReturn(updateProduct);
-        when(productMapper.getProductResponse(updateProduct)).thenReturn(expectedResponse);
+        setUpMockProductMapper(updateProduct, request, expectedResponse);
 
         var result = defaultProductService.updateById(request, id);
 
@@ -120,7 +119,61 @@ public class DefaultProductServiceTest {
         assertThrows(NotFoundException.class, () -> defaultProductService.updateById(request,product.getId()));
     }
 
-    //findById -> fetch, not found
-    //findAll -> fetchAll
+    @Test
+    public void shouldReturnExistingProductById() {
+        var id = product.getId();
+        var expectedResponse = productUtils.getProductResponse(product);
+
+        when(inMemoryProductRepository.findById(id)).thenReturn(Optional.of(product));
+        when(productMapper.getProductResponse(product)).thenReturn(expectedResponse);
+
+        var actual = defaultProductService.findById(id);
+
+        assertNotNull(actual);
+        assertEquals(expectedResponse.id(), actual.id());
+        assertEquals(expectedResponse.title(), actual.title());
+        assertEquals(expectedResponse.description(), actual.description());
+        assertEquals(expectedResponse.price(), actual.price());
+        assertEquals(expectedResponse.isAvailable(), actual.isAvailable());
+    }
+
+    @Test
+    public void shouldReturnHasNotExistProductById() {
+        var id = product.getId();
+
+        when(inMemoryProductRepository.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> defaultProductService.findById(id));
+    }
+
+    @Test
+    public void shouldReturnAllProducts() {
+        var products = List.of(
+                new Product(1, "Роза", "Красный цветок с шипами", 34.99, true),
+                new Product(2, "Тюльпан", "Весенний цветок различных оттенков", 20.99, true),
+                new Product(3, "Гвоздика", "Цветок с гофрированными лепестками", 20.99, false),
+                new Product(4, "Пионы", "Крупный цветок с пышными лепестками", 29.99, true),
+                new Product(5, "Лилии", "Элегантный цветок с сильным ароматом", 25.99, false),
+                new Product(6, "Ромашка", "Маленький белый цветок с желтой серединкой", 5.99, true)
+        );
+
+        var expectedList = products.stream().map(it -> {
+            var response = productUtils.getProductResponse(it);
+            when(productMapper.getProductResponse(it)).thenReturn(response);
+            return response;
+        }).toList();
+
+        when(inMemoryProductRepository.findAll()).thenReturn(products);
+
+        var actualList = defaultProductService.fetchAll();
+
+        assertThat(actualList).containsSequence(expectedList);
+    }
+
+    private void setUpMockProductMapper(Product product, ProductRequest req, ProductResponse resp) {
+        when(productMapper.getProduct(req)).thenReturn(product);
+        when(productMapper.getProductResponse(product)).thenReturn(resp);
+    }
+
     //deleteById -> delete, not found
 }
