@@ -23,10 +23,12 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.in;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith({MockitoExtension.class})
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -58,7 +60,8 @@ public class DefaultProductServiceTest {
 
         when(inMemoryProductRepository.findById(1)).thenReturn(Optional.empty());
         when(inMemoryProductRepository.save(product)).thenReturn(product);
-        setUpMockProductMapper(product, request, expectedResponse);
+        when(productMapper.getProduct(request)).thenReturn(product);
+        when(productMapper.getProductResponse(product)).thenReturn(expectedResponse);
 
         var result = defaultProductService.create(request);
 
@@ -90,8 +93,9 @@ public class DefaultProductServiceTest {
 
         when(inMemoryProductRepository.findById(1)).thenReturn(Optional.of(product));
         when(inMemoryProductRepository.save(updateProduct)).thenReturn(updateProduct);
+        when(productMapper.getProduct(request)).thenReturn(updateProduct);
         when(productMapper.mergeProduct(product, request)).thenReturn(updateProduct);
-        setUpMockProductMapper(updateProduct, request, expectedResponse);
+        when(productMapper.getProductResponse(updateProduct)).thenReturn(expectedResponse);
 
         var result = defaultProductService.updateById(request, id);
 
@@ -170,10 +174,29 @@ public class DefaultProductServiceTest {
         assertThat(actualList).containsSequence(expectedList);
     }
 
-    private void setUpMockProductMapper(Product product, ProductRequest req, ProductResponse resp) {
-        when(productMapper.getProduct(req)).thenReturn(product);
-        when(productMapper.getProductResponse(product)).thenReturn(resp);
+    @Test
+    public void shouldDeleteExistProductById() {
+        var id = product.getId();
+        var expectedResponse = productUtils.getProductResponse(product);
+
+        when(inMemoryProductRepository.deleteById(id)).thenReturn(true);
+        when(productMapper.getProductResponse(product)).thenReturn(expectedResponse);
+
+        defaultProductService.deleteById(product.getId());
+
+        verify(inMemoryProductRepository, times(1)).deleteById(id);
+        verifyNoMoreInteractions(inMemoryProductRepository);
     }
 
-    //deleteById -> delete, not found
+    @Test
+    public void shouldDeleteHasNotExistProductById() {
+        var id = product.getId();
+
+        when(inMemoryProductRepository.findById(id)).thenReturn(Optional.empty());
+        when(inMemoryProductRepository.deleteById(id)).thenReturn(false);
+
+        assertEquals(Optional.empty(), inMemoryProductRepository.findById(id));
+
+        assertThrows(NotFoundException.class, () -> defaultProductService.deleteById(id));
+    }
 }
