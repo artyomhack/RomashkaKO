@@ -52,4 +52,10 @@ public class ProductsController {
     public void deleteProductById(@PathVariable Integer id) {
         productService.deleteById(id);
     }
+
+    /*
+    create -> new, badRequest
+    updated -> updated, not found, edit
+
+     */
 }

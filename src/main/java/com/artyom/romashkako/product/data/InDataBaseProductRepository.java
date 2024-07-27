@@ -21,8 +21,7 @@ public class InDataBaseProductRepository implements ProductRepository {
 
     @Override
     public List<Product> findAll() {
-        return StreamSupport.stream(repository.findAll().spliterator(), false)
-                .toList();
+        return StreamSupport.stream(repository.findAll().spliterator(), false).toList();
     }
 
     @Override

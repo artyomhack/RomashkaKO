@@ -44,7 +44,7 @@ public class ProductUtils {
 
     public Product getRandomProduct(Integer id, String title, String description, Double price, Boolean isAvailable) {
         return new Product(
-                Objects.requireNonNullElse(id, RANDOM.nextInt()),
+                id, //id can be null when save a new entity
                 Objects.requireNonNullElse(title, "title_" + UUID.randomUUID()),
                 Objects.requireNonNullElse(description, "description_" + UUID.randomUUID()),
                 Objects.requireNonNullElse(price, RANDOM.nextDouble()),

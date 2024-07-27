@@ -13,7 +13,8 @@ import lombok.*;
 @Table(name = "products")
 public class Product implements Comparable<Product> {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "products_seq_gen")
+    @SequenceGenerator(name = "products_seq_gen", sequenceName = "seq_products", allocationSize = 1)
     private Integer id;
     @Column
     private String title;

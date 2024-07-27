@@ -37,8 +37,7 @@ public class AppConfig {
 
     @Bean
     @ConditionalOnMissingBean(ProductService.class)
-    public ProductService productService(ProductRepository repository, ProductMapper mapper) {
-        return new DefaultProductService(repository, mapper);
+    public ProductService productService(ProductRepository productRepository, ProductMapper mapper) {
+        return new DefaultProductService(productRepository, mapper);
     }
-
 }
