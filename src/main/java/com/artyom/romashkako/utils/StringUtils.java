@@ -1,8 +1,7 @@
-package com.artyom.romashkako;
+package com.artyom.romashkako.utils;
 
 import org.springframework.stereotype.Component;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.Random;
 

@@ -1,6 +1,6 @@
 package com.artyom.romashkako.product.controller;
 
-import com.artyom.romashkako.StringUtils;
+import com.artyom.romashkako.utils.StringUtils;
 import com.artyom.romashkako.common.dto.ErrorResponse;
 import com.artyom.romashkako.common.exception.NotFoundException;
 import com.artyom.romashkako.common.mapper.ValidationExceptionMapper;
@@ -14,7 +14,6 @@ import com.artyom.romashkako.product.service.DefaultProductService;
 import com.artyom.romashkako.product.service.ProductService;
 import com.artyom.romashkako.product.utils.ProductUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.assertj.core.api.ListAssert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
