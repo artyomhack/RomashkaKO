@@ -1,6 +1,5 @@
 package com.artyom.romashkako.product.data;
 
-import com.artyom.romashkako.common.exception.NotFoundException;
 import com.artyom.romashkako.product.model.Product;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
