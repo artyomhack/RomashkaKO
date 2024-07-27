@@ -1,12 +1,3 @@
 spring:
   application:
     name: RomashkaKO
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: root
-    password: root
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    show-sql: true
