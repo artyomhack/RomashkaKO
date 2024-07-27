@@ -11,11 +11,11 @@ import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
-public class GeneralProductRepository implements ProductService {
+public class GeneralProductService implements ProductService {
 
     private final DefaultProductService productService;
 
-    public GeneralProductRepository(ProductRepository productRepository, ProductMapper productMapper) {
+    public GeneralProductService(ProductRepository productRepository, ProductMapper productMapper) {
         this.productService = new DefaultProductService(productRepository, productMapper);
     }
 
