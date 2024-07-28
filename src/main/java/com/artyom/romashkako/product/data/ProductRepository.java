@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductRepository {
-    Product save(Product entity);
+    Product create(Product entity);
+    Product update(Product entity);
     List<Product> findAll();
     Optional<Product> findById(Integer id);
     int deleteProductById(Integer id);

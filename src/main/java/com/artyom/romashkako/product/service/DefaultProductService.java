@@ -19,12 +19,12 @@ public class DefaultProductService implements ProductService {
 
     @Override
     public ProductResponse create(ProductRequest request) {
-         return productMapper.getProductResponse(productRepository.save(productMapper.getProduct(request)));
+        return productMapper.getProductResponse(productRepository.create(productMapper.getProduct(request)));
     }
 
     @Override
     public ProductResponse updateById(ProductRequest request, Integer id) {
-        return productMapper.getProductResponse(productRepository.save(
+        return productMapper.getProductResponse(productRepository.update(
                 productMapper.mergeProduct(productRepository.findById(id).orElseThrow(() ->
                         new NotFoundException("Product by id " + id + " not found.")), request)
         ));

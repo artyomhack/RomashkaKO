@@ -52,7 +52,7 @@ public class DefaultProductServiceTest {
                 String.valueOf(product.getPrice()), product.isAvailable());
 
         when(inMemoryProductRepository.findById(1)).thenReturn(Optional.empty());
-        when(inMemoryProductRepository.save(product)).thenReturn(product);
+        when(inMemoryProductRepository.create(product)).thenReturn(product);
         when(productMapper.getProduct(request)).thenReturn(product);
         when(productMapper.getProductResponse(product)).thenReturn(expectedResponse);
 
@@ -85,7 +85,7 @@ public class DefaultProductServiceTest {
         var expectedResponse = productUtils.getProductResponse(updateProduct);
 
         when(inMemoryProductRepository.findById(1)).thenReturn(Optional.of(product));
-        when(inMemoryProductRepository.save(updateProduct)).thenReturn(updateProduct);
+        when(inMemoryProductRepository.create(updateProduct)).thenReturn(updateProduct);
         when(productMapper.getProduct(request)).thenReturn(updateProduct);
         when(productMapper.mergeProduct(product, request)).thenReturn(updateProduct);
         when(productMapper.getProductResponse(updateProduct)).thenReturn(expectedResponse);

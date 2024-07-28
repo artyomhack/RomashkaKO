@@ -31,7 +31,7 @@ class JdbcProductRepositoryTest {
         var expectedSize = productRepository.findAll().size() + 1;
         assertNull(expect.getId());
 
-        var actual = productRepository.save(expect);
+        var actual = productRepository.create(expect);
         var actualSize = productRepository.findAll().size();
 
         assertNotNull(actual.getId());
@@ -44,7 +44,7 @@ class JdbcProductRepositoryTest {
 
     @Test
     public void shouldReturnExistProductByIdFromDataBase() {
-        var expect = productRepository.save(productUtils.createRandomProduct());
+        var expect = productRepository.create(productUtils.createRandomProduct());
         var id = expect.getId();
 
         var actual = productRepository.findById(id);
@@ -74,7 +74,7 @@ class JdbcProductRepositoryTest {
                 new Product(null, "Пионы", "Крупный цветок с пышными лепестками", 29.99, true),
                 new Product(null, "Лилии", "Элегантный цветок с сильным ароматом", 25.99, false),
                 new Product(null, "Ромашка", "Маленький белый цветок с желтой серединкой", 5.99, true)
-        ).map(productRepository::save).toList();
+        ).map(productRepository::create).toList();
 
         var actualList = productRepository.findAll();
 

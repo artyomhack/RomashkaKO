@@ -10,12 +10,17 @@ public class InMemoryProductRepository implements ProductRepository {
     private final Map<Integer, Product> productMap = new HashMap<>();
 
     @Override
-    public Product save(Product entity) {
+    public Product create(Product entity) {
         Objects.requireNonNull(entity);
-        var id = Objects.requireNonNullElse(entity.getId(), getNextId());
+        var id = getNextId();
         entity.setId(id);
         productMap.put(id, entity);
         return entity;
+    }
+
+    @Override
+    public Product update(Product entity) {
+        return productMap.put(entity.getId(), entity);
     }
 
     private int getNextId() {

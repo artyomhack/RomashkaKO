@@ -4,26 +4,16 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
     <changeSet id="v1-1" author="Hackimullin Artyom">
-        <createTable tableName="products">
-            <column name="id" type="int">
+        <createTable tableName="product">
+            <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
             <column name="title" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="description" type="varchar(4096)">
-                <constraints nullable="true"/>
-            </column>
+            <column name="description" type="varchar(4096)"/>
             <column name="price" type="double" defaultValue="0.0"/>
-            <column name="available" type="bool" defaultValue="false"/>
+            <column name="available" type="boolean" defaultValueBoolean="false"/>
         </createTable>
-    </changeSet>
-    <changeSet id="v1-2" author="Artyom Hackimullin">
-        <sql>
-            CREATE SEQUENCE public.seq_products
-                AS INTEGER
-                START WITH 1
-                INCREMENT BY 1
-        </sql>
     </changeSet>
 </databaseChangeLog>

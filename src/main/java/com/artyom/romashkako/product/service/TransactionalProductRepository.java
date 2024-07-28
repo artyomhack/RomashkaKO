@@ -10,45 +10,38 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class DbProductService implements ProductService {
+public class TransactionalProductRepository extends DefaultProductService {
 
-    private final DefaultProductService productService;
-
-    public DbProductService(ProductRepository productRepository, ProductMapper productMapper) {
-        this.productService = new DefaultProductService(productRepository, productMapper);
+    public TransactionalProductRepository(ProductRepository productRepository, ProductMapper productMapper) {
+        super(productRepository, productMapper);
     }
 
     @Override
     @Transactional
     public ProductResponse create(ProductRequest request) {
-        return productService.create(request);
+        return super.create(request);
     }
 
     @Override
     @Transactional
     public ProductResponse updateById(ProductRequest request, Integer id) {
-        return productService.updateById(request, id);
+        return super.updateById(request, id);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<ProductResponse> fetchAll() {
-        return productService.fetchAll();
+        return super.fetchAll();
     }
 
     @Override
     @Transactional(readOnly = true)
     public ProductResponse findById(Integer id) {
-        return productService.findById(id);
+        return super.findById(id);
     }
 
     @Override
-    @Transactional
     public void deleteById(Integer id) {
-        productService.deleteById(id);
+        super.deleteById(id);
     }
-
-    //Большая транзакция  -> readOnly не дожидаются результата
-
-
 }

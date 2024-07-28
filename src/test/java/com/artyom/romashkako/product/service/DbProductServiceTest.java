@@ -36,7 +36,7 @@ class DbProductServiceTest {
     private ProductMapper productMapper;
 
     @InjectMocks
-    private DbProductService dbProductService;
+    private TransactionalProductRepository dbProductService;
 
     private Product product;
 
@@ -52,7 +52,7 @@ class DbProductServiceTest {
                 String.valueOf(product.getPrice()), product.isAvailable());
 
         when(productRepository.findById(1)).thenReturn(Optional.empty());
-        when(productRepository.save(product)).thenReturn(product);
+        when(productRepository.create(product)).thenReturn(product);
         when(productMapper.getProduct(request)).thenReturn(product);
         when(productMapper.getProductResponse(product)).thenReturn(expectedResponse);
 
@@ -85,7 +85,7 @@ class DbProductServiceTest {
         var expectedResponse = productUtils.getProductResponse(updateProduct);
 
         when(productRepository.findById(1)).thenReturn(Optional.of(product));
-        when(productRepository.save(updateProduct)).thenReturn(updateProduct);
+        when(productRepository.update(updateProduct)).thenReturn(updateProduct);
         when(productMapper.getProduct(request)).thenReturn(updateProduct);
         when(productMapper.mergeProduct(product, request)).thenReturn(updateProduct);
         when(productMapper.getProductResponse(updateProduct)).thenReturn(expectedResponse);

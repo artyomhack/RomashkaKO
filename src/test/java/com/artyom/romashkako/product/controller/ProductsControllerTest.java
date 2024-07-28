@@ -64,7 +64,7 @@ class ProductsControllerTest {
 
     @Test
     public void shouldReturnProductById_200ok() throws Exception {
-        var expected = productRepository.save(productUtils.createRandomProduct());
+        var expected = productRepository.create(productUtils.createRandomProduct());
         var response = mockMvc
                 .perform(get("/api/v1/product/" + expected.getId()))
                 .andExpect(status().isOk())
@@ -98,7 +98,7 @@ class ProductsControllerTest {
 
     @Test
     public void shouldCreateNewProduct_201created() throws Exception {
-        var expected = productRepository.save(productUtils.createRandomProduct());
+        var expected = productRepository.create(productUtils.createRandomProduct());
         var request = productUtils.getProductRequest(expected);
 
         var response = mockMvc.perform(post("/api/v1/product")
@@ -145,7 +145,7 @@ class ProductsControllerTest {
 
     @Test
     public void shouldReturnedUpdatedProductById_200ok() throws Exception {
-        var oldProduct = productRepository.save(productUtils.createRandomProduct());
+        var oldProduct = productRepository.create(productUtils.createRandomProduct());
         var expectedId = oldProduct.getId();
         var expectedTitle = "updated_" + oldProduct.getTitle();
         var expectedDescription = "updated_" + oldProduct.getDescription();
@@ -175,7 +175,7 @@ class ProductsControllerTest {
 
     @Test
     public void shouldCatchThrowWhenNotFoundUpdatedProductById_404notFound() throws Exception {
-        var oldProduct = productRepository.save(productUtils.createRandomProduct());
+        var oldProduct = productRepository.create(productUtils.createRandomProduct());
         var expectedId = oldProduct.getId();
         var expectedTitle = stringUtils.getRandomString(15);
         var expectedDescription = stringUtils.getRandomString(115);
@@ -202,7 +202,7 @@ class ProductsControllerTest {
 
     @Test
     public void shouldCatchThrowWhenIncorrectUpdatedProductById_400badRequest() throws Exception {
-        var oldProduct = productRepository.save(productUtils.createRandomProduct());
+        var oldProduct = productRepository.create(productUtils.createRandomProduct());
         var expectedId = oldProduct.getId();
         var expectedTitle = stringUtils.getRandomString(300);
         var expectedDescription = stringUtils.getRandomString(4100);
@@ -229,7 +229,7 @@ class ProductsControllerTest {
 
     @Test
     public void shouldDeleteProductById_200ok() throws Exception {
-        var product = productRepository.save(productUtils.createRandomProduct());
+        var product = productRepository.create(productUtils.createRandomProduct());
 
         mockMvc.perform(delete("/api/v1/product/" + product.getId()))
                 .andDo(print())
@@ -264,7 +264,7 @@ class ProductsControllerTest {
                 new Product(4, "Пионы", "Крупный цветок с пышными лепестками", 29.99, true),
                 new Product(5, "Лилии", "Элегантный цветок с сильным ароматом", 25.99, false),
                 new Product(6, "Ромашка", "Маленький белый цветок с желтой серединкой", 5.99, true)
-        )).stream().map(it -> productMapper.getProductResponse(productRepository.save(it))).toList();
+        )).stream().map(it -> productMapper.getProductResponse(productRepository.create(it))).toList();
 
         var responses = mockMvc.perform(get("/api/v1/product/list"))
                 .andDo(print())

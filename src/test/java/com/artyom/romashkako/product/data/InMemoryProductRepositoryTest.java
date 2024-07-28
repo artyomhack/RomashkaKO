@@ -25,7 +25,7 @@ class InMemoryProductRepositoryTest {
     public void shouldAddedNewProduct() {
         var expected = PRODUCT;
 
-        var result = inMemoryProductRepository.save(PRODUCT);
+        var result = inMemoryProductRepository.create(PRODUCT);
 
         assertNotNull(result.getId());
         assertEquals(expected.getTitle(), result.getTitle());
@@ -53,7 +53,7 @@ class InMemoryProductRepositoryTest {
 
        new ArrayList<>(expectedList).forEach(it -> {
             it.setId(null);
-            inMemoryProductRepository.save(it);
+            inMemoryProductRepository.create(it);
         });
 
         var actualList = inMemoryProductRepository.findAll();
@@ -65,7 +65,7 @@ class InMemoryProductRepositoryTest {
 
     @Test
     public void shouldCheckExistProductById() {
-        var expectedProduct = inMemoryProductRepository.save(PRODUCT);
+        var expectedProduct = inMemoryProductRepository.create(PRODUCT);
         var id = expectedProduct.getId();
 
         Product result = inMemoryProductRepository.findById(id).orElse(null);
@@ -89,7 +89,7 @@ class InMemoryProductRepositoryTest {
                 new Product(6, "Ромашка", "Маленький белый цветок с желтой серединкой", 5.99, true)
         );
 
-        expectedList.forEach(inMemoryProductRepository::save);
+        expectedList.forEach(inMemoryProductRepository::create);
 
         List<Product> result = inMemoryProductRepository.findAll();
 
@@ -99,7 +99,7 @@ class InMemoryProductRepositoryTest {
 
     @Test
     public void shouldDeleteExistProductById() {
-        var expected = inMemoryProductRepository.save(PRODUCT);
+        var expected = inMemoryProductRepository.create(PRODUCT);
         var expectedSize = inMemoryProductRepository.findAll().size();
         var id = expected.getId();
 

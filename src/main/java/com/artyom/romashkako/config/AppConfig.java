@@ -30,7 +30,7 @@ public class AppConfig {
                 new Product(4, "Пионы", "Крупный цветок с пышными лепестками", 29.99, true),
                 new Product(5, "Лилии", "Элегантный цветок с сильным ароматом", 25.99, false),
                 new Product(6, "Ромашка", "Маленький белый цветок с желтой серединкой", 5.99, true)
-        ).forEach(repository::save);
+        ).forEach(repository::create);
 
         return repository;
     }
