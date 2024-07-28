@@ -172,12 +172,12 @@ public class DefaultProductServiceTest {
         var id = product.getId();
         var expectedResponse = productUtils.getProductResponse(product);
 
-        when(inMemoryProductRepository.deleteById(id)).thenReturn(true);
+        when(inMemoryProductRepository.deleteProductById(id)).thenReturn(1);
         when(productMapper.getProductResponse(product)).thenReturn(expectedResponse);
 
         defaultProductService.deleteById(product.getId());
 
-        verify(inMemoryProductRepository, times(1)).deleteById(id);
+        verify(inMemoryProductRepository, times(1)).deleteProductById(id);
         verifyNoMoreInteractions(inMemoryProductRepository);
     }
 
@@ -186,7 +186,7 @@ public class DefaultProductServiceTest {
         var id = product.getId();
 
         when(inMemoryProductRepository.findById(id)).thenReturn(Optional.empty());
-        when(inMemoryProductRepository.deleteById(id)).thenReturn(false);
+        when(inMemoryProductRepository.deleteProductById(id)).thenReturn(0);
 
         assertEquals(Optional.empty(), inMemoryProductRepository.findById(id));
 

@@ -1,7 +1,7 @@
 package com.artyom.romashkako.product.service;
 
 import com.artyom.romashkako.common.exception.NotFoundException;
-import com.artyom.romashkako.product.data.InDataBaseProductRepository;
+import com.artyom.romashkako.product.data.JdbcProductRepository;
 import com.artyom.romashkako.product.dto.ProductRequest;
 import com.artyom.romashkako.product.dto.ProductResponse;
 import com.artyom.romashkako.product.mapper.ProductMapper;
@@ -15,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,22 +22,21 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-class GeneralProductServiceTest {
+class DbProductServiceTest {
 
     private final ProductUtils productUtils = new ProductUtils();
 
     @Mock
-    private InDataBaseProductRepository productRepository;
+    private JdbcProductRepository productRepository;
 
     @Mock
     private ProductMapper productMapper;
 
     @InjectMocks
-    private GeneralProductService generalProductService;
+    private DbProductService dbProductService;
 
     private Product product;
 
@@ -58,7 +56,7 @@ class GeneralProductServiceTest {
         when(productMapper.getProduct(request)).thenReturn(product);
         when(productMapper.getProductResponse(product)).thenReturn(expectedResponse);
 
-        var result = generalProductService.create(request);
+        var result = dbProductService.create(request);
 
         assertEquals(expectedResponse.id(), result.id());
         assertEquals(expectedResponse.title(), result.title());
@@ -92,7 +90,7 @@ class GeneralProductServiceTest {
         when(productMapper.mergeProduct(product, request)).thenReturn(updateProduct);
         when(productMapper.getProductResponse(updateProduct)).thenReturn(expectedResponse);
 
-        var result = generalProductService.updateById(request, id);
+        var result = dbProductService.updateById(request, id);
 
         assertEquals(id, result.id());
         assertEquals(updatedTitle, result.title() );
@@ -115,7 +113,7 @@ class GeneralProductServiceTest {
 
         when(productRepository.findById(product.getId())).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> generalProductService.updateById(request,product.getId()));
+        assertThrows(NotFoundException.class, () -> dbProductService.updateById(request,product.getId()));
     }
 
     @Test
@@ -126,7 +124,7 @@ class GeneralProductServiceTest {
         when(productRepository.findById(id)).thenReturn(Optional.of(product));
         when(productMapper.getProductResponse(product)).thenReturn(expectedResponse);
 
-        var actual = generalProductService.findById(id);
+        var actual = dbProductService.findById(id);
 
         assertNotNull(actual);
         assertEquals(expectedResponse.id(), actual.id());
@@ -142,7 +140,7 @@ class GeneralProductServiceTest {
 
         when(productRepository.findById(id)).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> generalProductService.findById(id));
+        assertThrows(NotFoundException.class, () -> dbProductService.findById(id));
     }
 
     @Test
@@ -164,7 +162,7 @@ class GeneralProductServiceTest {
 
         when(productRepository.findAll()).thenReturn(products);
 
-        var actualList = generalProductService.fetchAll();
+        var actualList = dbProductService.fetchAll();
 
         assertThat(actualList).containsSequence(expectedList);
     }
@@ -174,12 +172,12 @@ class GeneralProductServiceTest {
         var id = product.getId();
         var expectedResponse = productUtils.getProductResponse(product);
 
-        when(productRepository.deleteById(id)).thenReturn(true);
+        when(productRepository.deleteProductById(id)).thenReturn(1);
         when(productMapper.getProductResponse(product)).thenReturn(expectedResponse);
 
-        generalProductService.deleteById(product.getId());
+        dbProductService.deleteById(product.getId());
 
-        verify(productRepository, times(1)).deleteById(id);
+        verify(productRepository, times(1)).deleteProductById(id);
         verifyNoMoreInteractions(productRepository);
     }
 
@@ -188,11 +186,11 @@ class GeneralProductServiceTest {
         var id = product.getId();
 
         when(productRepository.findById(id)).thenReturn(Optional.empty());
-        when(productRepository.deleteById(id)).thenReturn(false);
+        when(productRepository.deleteProductById(id)).thenReturn(0);
 
         assertEquals(Optional.empty(), productRepository.findById(id));
 
-        assertThrows(NotFoundException.class, () -> generalProductService.deleteById(id));
+        assertThrows(NotFoundException.class, () -> dbProductService.deleteById(id));
     }
 
 }

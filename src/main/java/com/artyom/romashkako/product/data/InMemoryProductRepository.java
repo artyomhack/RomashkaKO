@@ -41,7 +41,7 @@ public class InMemoryProductRepository implements ProductRepository {
     }
 
     @Override
-    public boolean deleteById(Integer id) {
-        return productMap.remove(id) != null;
+    public int deleteProductById(Integer id) {
+        return productMap.remove(id) != null ? 1 : 0;
     }
 }

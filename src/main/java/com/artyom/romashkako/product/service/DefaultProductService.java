@@ -46,7 +46,7 @@ public class DefaultProductService implements ProductService {
 
     @Override
     public void deleteById(Integer id) {
-        if (!productRepository.deleteById(id)) {
+        if (productRepository.deleteProductById(id) == 0) {
             throw new NotFoundException("Product by id " + id + " not found.");
         }
     }

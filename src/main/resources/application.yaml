@@ -6,10 +6,5 @@ spring:
     url: jdbc:postgresql://localhost:5432/romashkako
     username: postgres
     password: postgres
-  jpa:
-    database: postgresql
-    show-sql: true
-    hibernate:
-      ddl-auto: validate
   liquibase:
     change-log: db.changelog/main-changelog.xml

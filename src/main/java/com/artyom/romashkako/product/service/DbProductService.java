@@ -10,12 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
-public class GeneralProductService implements ProductService {
+public class DbProductService implements ProductService {
 
     private final DefaultProductService productService;
 
-    public GeneralProductService(ProductRepository productRepository, ProductMapper productMapper) {
+    public DbProductService(ProductRepository productRepository, ProductMapper productMapper) {
         this.productService = new DefaultProductService(productRepository, productMapper);
     }
 
@@ -48,4 +47,8 @@ public class GeneralProductService implements ProductService {
     public void deleteById(Integer id) {
         productService.deleteById(id);
     }
+
+    //Большая транзакция  -> readOnly не дожидаются результата
+
+
 }

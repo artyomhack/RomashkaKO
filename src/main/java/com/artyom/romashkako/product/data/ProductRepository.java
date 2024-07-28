@@ -9,5 +9,5 @@ public interface ProductRepository {
     Product save(Product entity);
     List<Product> findAll();
     Optional<Product> findById(Integer id);
-    boolean deleteById(Integer id);
+    int deleteProductById(Integer id);
 }

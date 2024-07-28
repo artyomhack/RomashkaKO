@@ -82,7 +82,7 @@ class ProductsControllerTest {
         var expectedId = Integer.MAX_VALUE;
 
         if (productRepository.findById(expectedId).isPresent())
-            productRepository.deleteById(expectedId);
+            productRepository.deleteProductById(expectedId);
 
         var response = mockMvc
                 .perform(delete("/api/v1/product/" + expectedId))
@@ -98,7 +98,7 @@ class ProductsControllerTest {
 
     @Test
     public void shouldCreateNewProduct_201created() throws Exception {
-        var expected = productUtils.createRandomProduct();
+        var expected = productRepository.save(productUtils.createRandomProduct());
         var request = productUtils.getProductRequest(expected);
 
         var response = mockMvc.perform(post("/api/v1/product")
@@ -175,7 +175,7 @@ class ProductsControllerTest {
 
     @Test
     public void shouldCatchThrowWhenNotFoundUpdatedProductById_404notFound() throws Exception {
-        var oldProduct = productUtils.createRandomProduct();
+        var oldProduct = productRepository.save(productUtils.createRandomProduct());
         var expectedId = oldProduct.getId();
         var expectedTitle = stringUtils.getRandomString(15);
         var expectedDescription = stringUtils.getRandomString(115);
@@ -183,7 +183,7 @@ class ProductsControllerTest {
 
         var request = new ProductRequest(expectedTitle, expectedDescription, expectedPrice, false);
 
-        productRepository.deleteById(expectedId);
+        productRepository.deleteProductById(expectedId);
 
         var response = mockMvc.perform(patch("/api/v1/product/" + expectedId)
                         .content(objectMapper.writeValueAsString(request))
@@ -202,7 +202,7 @@ class ProductsControllerTest {
 
     @Test
     public void shouldCatchThrowWhenIncorrectUpdatedProductById_400badRequest() throws Exception {
-        var oldProduct = productUtils.createRandomProduct();
+        var oldProduct = productRepository.save(productUtils.createRandomProduct());
         var expectedId = oldProduct.getId();
         var expectedTitle = stringUtils.getRandomString(300);
         var expectedDescription = stringUtils.getRandomString(4100);
@@ -242,9 +242,8 @@ class ProductsControllerTest {
     public void shouldCatchThrowWhenDeleteNotExistProductById_404notFound() throws Exception {
         var id = Integer.MAX_VALUE;
 
-        if (productRepository.findById(id).isPresent()) {
-            productRepository.deleteById(id);
-        }
+        if (productRepository.findById(id).isPresent())
+            productRepository.deleteProductById(id);
 
         var response = mockMvc.perform(delete("/api/v1/product/" + id))
                 .andDo(print())
@@ -276,12 +275,4 @@ class ProductsControllerTest {
         assertFalse(actualList.isEmpty());
         assertThat(actualList).containsSequence(expectedProducts);
     }
-
-
-    // create fun - Y
-    // update 200,404, 400
-    // delete 404, 200
-    // fetch all -> create 10 item -> map to dto -> return list all 10 exist in fetchAll
-    // ListAssert.assertThatDoubleStream() -> есть метод
-
 }

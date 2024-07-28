@@ -1,19 +1,12 @@
 package com.artyom.romashkako.product.data;
 
 import com.artyom.romashkako.product.model.Product;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,13 +19,13 @@ class InMemoryProductRepositoryTest {
             34.99, true);
 
     @Autowired
-    private ProductRepository productRepository;
+    private ProductRepository inMemoryProductRepository;
 
     @Test
     public void shouldAddedNewProduct() {
         var expected = PRODUCT;
 
-        var result = productRepository.save(PRODUCT);
+        var result = inMemoryProductRepository.save(PRODUCT);
 
         assertNotNull(result.getId());
         assertEquals(expected.getTitle(), result.getTitle());
@@ -52,17 +45,18 @@ class InMemoryProductRepositoryTest {
                 new Product(6, "Ромашка", "Маленький белый цветок с желтой серединкой", 5.99, true)
         );
 
-        var size = productRepository.findAll().size();
+        var size = inMemoryProductRepository.findAll().size();
+
         for (int id = 1; id <= size; id++) {
-            productRepository.deleteById(id);
+            inMemoryProductRepository.deleteProductById(id);
         }
 
        new ArrayList<>(expectedList).forEach(it -> {
             it.setId(null);
-            productRepository.save(it);
+            inMemoryProductRepository.save(it);
         });
 
-        var actualList = productRepository.findAll();
+        var actualList = inMemoryProductRepository.findAll();
 
         assertFalse(actualList.isEmpty());
         assertEquals(expectedList.size(), actualList.size());
@@ -71,10 +65,10 @@ class InMemoryProductRepositoryTest {
 
     @Test
     public void shouldCheckExistProductById() {
-        var expectedProduct = productRepository.save(PRODUCT);
+        var expectedProduct = inMemoryProductRepository.save(PRODUCT);
         var id = expectedProduct.getId();
 
-        Product result = productRepository.findById(id).orElse(null);
+        Product result = inMemoryProductRepository.findById(id).orElse(null);
 
         assertNotNull(result);
         assertEquals(result.getId(), id);
@@ -95,9 +89,9 @@ class InMemoryProductRepositoryTest {
                 new Product(6, "Ромашка", "Маленький белый цветок с желтой серединкой", 5.99, true)
         );
 
-        expectedList.forEach(productRepository::save);
+        expectedList.forEach(inMemoryProductRepository::save);
 
-        List<Product> result = productRepository.findAll();
+        List<Product> result = inMemoryProductRepository.findAll();
 
         assertFalse(result.isEmpty());
         assertThat(result).containsSequence(expectedList);
@@ -105,16 +99,17 @@ class InMemoryProductRepositoryTest {
 
     @Test
     public void shouldDeleteExistProductById() {
-        var expected = productRepository.save(PRODUCT);
-        var expectedSize = productRepository.findAll().size();
+        var expected = inMemoryProductRepository.save(PRODUCT);
+        var expectedSize = inMemoryProductRepository.findAll().size();
         var id = expected.getId();
 
-        productRepository.deleteById(id);
+        int result = inMemoryProductRepository.deleteProductById(id);
 
-        var actualSize = productRepository.findAll().size();
+        var actualSize = inMemoryProductRepository.findAll().size();
 
-        assertTrue(productRepository.findById(id).isEmpty());
+        assertTrue(inMemoryProductRepository.findById(id).isEmpty());
         assertEquals(expectedSize - 1, actualSize);
+        assertEquals( 1, result);
     }
 
 }
