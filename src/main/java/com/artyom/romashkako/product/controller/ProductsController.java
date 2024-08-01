@@ -4,14 +4,12 @@ import com.artyom.romashkako.product.dto.ProductResponse;
 import com.artyom.romashkako.product.dto.ProductRequest;
 import com.artyom.romashkako.product.service.ProductService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/product")
@@ -51,12 +49,13 @@ public class ProductsController {
 
     @GetMapping("/search")
     public List<ProductResponse> searchProducts(@RequestParam(name = "title", required = false) String title,
-                                                @RequestParam(name = "priceGT", required = false) Double priceGT,
-                                                @RequestParam(name = "priceLT", required = false) Double priceLT,
+                                                @RequestParam(name = "priceGt", required = false) Double priceGt,
+                                                @RequestParam(name = "priceLt", required = false) Double priceLt,
                                                 @RequestParam(name = "available", required = false, defaultValue = "true") Boolean available,
-                                                @RequestParam(name = "limit", required = false) Integer limit) {
+                                                @RequestParam(name = "limit", required = false) Integer limit,
+                                                @RequestParam(name = "sortBy", required = false) String sort) {
 
-        return productService.findByCriteria(title, priceGT, priceLT, available, limit);
+        return productService.findByCriteria(title, priceGt, priceLt, available, limit, sort);
     }
 
     @DeleteMapping("/{id}")

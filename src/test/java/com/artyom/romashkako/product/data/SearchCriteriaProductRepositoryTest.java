@@ -48,7 +48,7 @@ class SearchCriteriaProductRepositoryTest {
         String[] expectTitles = Arrays.array("Розы", "Ромашка", "Рогоз");
         var expectSize = expectTitles.length;
 
-        var actual = criteriaProductRepository.findByCriteria("Ро",null,null,null,null );
+        var actual = criteriaProductRepository.findByCriteria("Ро",null,null,null,null, null);
         var actualSize = actual.size();
 
         assertEquals(expectSize, actualSize);
@@ -60,7 +60,7 @@ class SearchCriteriaProductRepositoryTest {
         var expectPrices = Arrays.array(67.99, 144.99);
         var expectSize = expectPrices.length;
 
-        var actual = criteriaProductRepository.findByCriteria(null, 59.99, null, null, null);
+        var actual = criteriaProductRepository.findByCriteria(null, 59.99, null, null, null, null);
         var actualSize = actual.size();
 
         assertEquals(expectSize, actualSize);
@@ -72,7 +72,7 @@ class SearchCriteriaProductRepositoryTest {
         var expectPrices = Arrays.array(29.99, 34.79, 59.99);
         var expectSize = expectPrices.length;
 
-        var actual = criteriaProductRepository.findByCriteria(null, null, 60.00, null, null);
+        var actual = criteriaProductRepository.findByCriteria(null, null, 60.00, null, null,null);
         var actualSize = actual.size();
 
         assertEquals(expectSize, actualSize);
@@ -84,7 +84,7 @@ class SearchCriteriaProductRepositoryTest {
         var expectAvailable = Arrays.array(true, true, true);
         var expectSize = expectAvailable.length;
 
-        var actual = criteriaProductRepository.findByCriteria(null, null, null, true, null);
+        var actual = criteriaProductRepository.findByCriteria(null, null, null, true, null, null);
         var actualSize = actual.size();
 
         assertEquals(expectSize, actualSize);
@@ -94,7 +94,7 @@ class SearchCriteriaProductRepositoryTest {
     @Test
     public void shouldReturnProductByCriteriaLimitIsOne_whereUseOneFilter() {
         var expectSize = 1;
-        var actualSize = criteriaProductRepository.findByCriteria(null, null, null, null, 1).size();
+        var actualSize = criteriaProductRepository.findByCriteria(null, null, null, null, 1, null).size();
         assertEquals(expectSize, actualSize);
     }
 
@@ -105,7 +105,7 @@ class SearchCriteriaProductRepositoryTest {
         var expectAvailable = Arrays.array(true, false);
         var expectSize = 2;
 
-        var actual = criteriaProductRepository.findByCriteria("Ро", 29.99, null, null, null);
+        var actual = criteriaProductRepository.findByCriteria("Ро", 29.99, null, null, null, null);
         var actualSize = actual.size();
 
         assertEquals(expectSize, actualSize);
@@ -120,7 +120,7 @@ class SearchCriteriaProductRepositoryTest {
         var expectAvailable = Arrays.array(false, false);
         var expectSize = 2;
 
-        var actual = criteriaProductRepository.findByCriteria(null, null, 145.00, false, 2);
+        var actual = criteriaProductRepository.findByCriteria(null, null, 145.00, false, 2, null);
         var actualSize = actual.size();
 
         assertEquals(expectSize, actualSize);

@@ -7,6 +7,7 @@ import com.artyom.romashkako.product.data.JdbcProductRepository;
 import com.artyom.romashkako.product.data.ProductRepository;
 import com.artyom.romashkako.product.data.SearchCriteriaProductRepository;
 import com.artyom.romashkako.product.mapper.ProductMapper;
+import com.artyom.romashkako.product.mapper.TypeSortMapper;
 import com.artyom.romashkako.product.model.Product;
 import com.artyom.romashkako.product.service.ProductService;
 import com.artyom.romashkako.product.service.DefaultProductService;
@@ -30,7 +31,7 @@ public class AppConfig {
 
         List.of(
                 new Product(1, "Роза", "Красный цветок с шипами", 34.99, true),
-                new Product(2, "Тюльпан", "Весенний цветок различных оттенков",20.99, true),
+                new Product(2, "Тюльпан", "Весенний цветок различных оттенков", 20.99, true),
                 new Product(3, "Гвоздика", "Цветок с гофрированными лепестками", 20.99, false),
                 new Product(4, "Пионы", "Крупный цветок с пышными лепестками", 29.99, true),
                 new Product(5, "Лилии", "Элегантный цветок с сильным ароматом", 25.99, false),
@@ -42,7 +43,9 @@ public class AppConfig {
 
     @Bean
     @ConditionalOnMissingBean(ProductService.class)
-    public ProductService productService(ProductRepository productRepository, SearchCriteriaProductRepository criteriaProductRepository, ProductMapper mapper) {
-        return new DefaultProductService(productRepository, criteriaProductRepository, mapper);
+    public ProductService productService(ProductRepository productRepository, SearchCriteriaProductRepository criteriaProductRepository,
+                                         ProductMapper productMapper, TypeSortMapper sortMapper) {
+
+        return new DefaultProductService(productRepository, criteriaProductRepository, productMapper, sortMapper);
     }
 }

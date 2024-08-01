@@ -1,6 +1,8 @@
 package com.artyom.romashkako.product.data;
 
+import com.artyom.romashkako.common.enums.TypeSort;
 import com.artyom.romashkako.product.model.Product;
+import jakarta.persistence.Cache;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -90,7 +92,7 @@ public class JdbcProductRepository implements ProductRepository, SearchCriteriaP
 
 
     @Override
-    public List<Product> findByCriteria(String title, Double priceGT, Double priceLT, Boolean available, Integer limit) {
+    public List<Product> findByCriteria(String title, Double priceGT, Double priceLT, Boolean available, Integer limit, TypeSort sort) {
         var sql = new StringBuilder("SELECT * FROM product WHERE 1=1");
         var params = new ArrayList<>();
 
@@ -115,7 +117,15 @@ public class JdbcProductRepository implements ProductRepository, SearchCriteriaP
             params.add(limit);
         }
 
-        return jdbcTemplate.query(sql.toString(), rowMapper, params.toArray());
+        switch (sort) {
+            case TITLE_DESC -> sql.append(" ORDER BY title DESC;");
+            case TITLE_ASC -> sql.append(" ORDER BY title ASC;");
+            case PRICE_DOWN -> sql.append(" ORDER BY price DESC;");
+            case PRICE_UP ->  sql.append(" ORDER BY price ASC;");
+            case NON -> sql.append(" ORDER BY id;");
+        }
+
+        return jdbcTemplate.query(sql.toString(), rowMapper, params);
     }
 
 }

@@ -1,11 +1,13 @@
 package com.artyom.romashkako.product.service;
 
+import com.artyom.romashkako.common.enums.TypeSort;
 import com.artyom.romashkako.product.data.ProductRepository;
 import com.artyom.romashkako.product.data.SearchCriteriaProductRepository;
 import com.artyom.romashkako.product.dto.ProductRequest;
 import com.artyom.romashkako.product.dto.ProductResponse;
 import com.artyom.romashkako.common.exception.NotFoundException;
 import com.artyom.romashkako.product.mapper.ProductMapper;
+import com.artyom.romashkako.product.mapper.TypeSortMapper;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
@@ -17,6 +19,7 @@ public class DefaultProductService implements ProductService {
     private final ProductRepository productRepository;
     private final SearchCriteriaProductRepository criteriaProductRepository;
     private final ProductMapper productMapper;
+    private final TypeSortMapper sortMapper;
 
     @Override
     public ProductResponse create(ProductRequest request) {
@@ -39,8 +42,9 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public List<ProductResponse> findByCriteria(String title, Double priceGT, Double priceGL, Boolean available, Integer limit) {
-        return criteriaProductRepository.findByCriteria(title, priceGT, priceGL, available, limit).stream()
+    public List<ProductResponse> findByCriteria(String title, Double priceGt, Double priceLt, Boolean available, Integer limit, String sort) {
+        var typeSort = sortMapper.toTypeSort(sort);
+        return criteriaProductRepository.findByCriteria(title, priceGt, priceLt, available, limit, typeSort).stream()
                 .map(productMapper::getProductResponse)
                 .toList();
     }
