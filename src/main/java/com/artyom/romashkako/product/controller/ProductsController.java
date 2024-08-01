@@ -4,6 +4,7 @@ import com.artyom.romashkako.product.dto.ProductResponse;
 import com.artyom.romashkako.product.dto.ProductRequest;
 import com.artyom.romashkako.product.service.ProductService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,11 +50,13 @@ public class ProductsController {
     }
 
     @GetMapping("/search")
-    public List<ProductResponse> searchProducts(@RequestParam String title,
-                                                @RequestParam String priceGT,
-                                                @RequestParam String priceLT,
-                                                @RequestParam String available) {
-        return List.of();
+    public List<ProductResponse> searchProducts(@RequestParam(name = "title", required = false) String title,
+                                                @RequestParam(name = "priceGT", required = false) Double priceGT,
+                                                @RequestParam(name = "priceLT", required = false) Double priceLT,
+                                                @RequestParam(name = "available", required = false, defaultValue = "true") Boolean available,
+                                                @RequestParam(name = "limit", required = false) Integer limit) {
+
+        return productService.findByCriteria(title, priceGT, priceLT, available, limit);
     }
 
     @DeleteMapping("/{id}")

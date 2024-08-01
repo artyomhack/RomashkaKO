@@ -9,7 +9,7 @@ public interface ProductService {
     ProductResponse create(ProductRequest request);
     ProductResponse updateById(ProductRequest request, Integer id);
     List<ProductResponse> fetchAll();
-    List<ProductResponse> findByCriteria(String title, double priceGT, double priceGL, boolean available, int limit);
+    List<ProductResponse> findByCriteria(String title, Double priceGT, Double priceGL, Boolean available, Integer limit);
     ProductResponse findById(Integer id);
     void deleteById(Integer id);
 }

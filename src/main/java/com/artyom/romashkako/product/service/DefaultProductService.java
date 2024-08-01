@@ -39,8 +39,8 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public List<ProductResponse> findByCriteria(String title, double priceGT, double priceGL, boolean available, int limit) {
-        return criteriaProductRepository.findByCriteria(title, priceGT, priceGT, available, limit).stream()
+    public List<ProductResponse> findByCriteria(String title, Double priceGT, Double priceGL, Boolean available, Integer limit) {
+        return criteriaProductRepository.findByCriteria(title, priceGT, priceGL, available, limit).stream()
                 .map(productMapper::getProductResponse)
                 .toList();
     }

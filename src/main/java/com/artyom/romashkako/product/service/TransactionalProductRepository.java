@@ -43,7 +43,7 @@ public class TransactionalProductRepository extends DefaultProductService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ProductResponse> findByCriteria(String title, double priceGT, double priceGL, boolean available, int limit) {
+    public List<ProductResponse> findByCriteria(String title, Double priceGT, Double priceGL, Boolean available, Integer limit) {
         return super.findByCriteria(title, priceGT, priceGL, available, limit);
     }
 
