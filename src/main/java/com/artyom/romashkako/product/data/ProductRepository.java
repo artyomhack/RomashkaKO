@@ -1,6 +1,8 @@
 package com.artyom.romashkako.product.data;
 
 import com.artyom.romashkako.product.model.Product;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;

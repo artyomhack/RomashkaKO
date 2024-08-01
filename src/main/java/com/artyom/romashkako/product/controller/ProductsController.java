@@ -48,6 +48,14 @@ public class ProductsController {
         return productService.fetchAll();
     }
 
+    @GetMapping("/search")
+    public List<ProductResponse> searchProducts(@RequestParam String title,
+                                                @RequestParam String priceGT,
+                                                @RequestParam String priceLT,
+                                                @RequestParam String available) {
+        return List.of();
+    }
+
     @DeleteMapping("/{id}")
     public void deleteProductById(@PathVariable Integer id) {
         productService.deleteById(id);

@@ -3,10 +3,13 @@ package com.artyom.romashkako.product.data;
 import com.artyom.romashkako.product.model.Product;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -14,15 +17,14 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @Slf4j
 @Repository
 @Transactional(propagation = Propagation.MANDATORY)
 @AllArgsConstructor
-public class JdbcProductRepository implements ProductRepository {
+public class JdbcProductRepository implements ProductRepository, SearchCriteriaProductRepository {
 
     private final RowMapper<Product> rowMapper = (rs, rowNum) -> new Product(
             rs.getInt("id"),
@@ -40,7 +42,7 @@ public class JdbcProductRepository implements ProductRepository {
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(sql, new String[] { "id" });
+            PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
             ps.setString(1, entity.getTitle());
             ps.setString(2, entity.getDescription());
             ps.setDouble(3, entity.getPrice());
@@ -85,4 +87,35 @@ public class JdbcProductRepository implements ProductRepository {
     public int deleteProductById(Integer id) {
         return jdbcTemplate.update("DELETE FROM product WHERE id=?", id);
     }
+
+
+    @Override
+    public List<Product> findByCriteria(String title, Double priceGT, Double priceLT, Boolean available, Integer limit) {
+        var sql = new StringBuilder("SELECT * FROM product WHERE 1=1");
+        var params = new ArrayList<>();
+
+        if (Objects.nonNull(title)) {
+            sql.append(" AND title ~* ?");
+            params.add(title);
+        }
+        if (Objects.nonNull(priceGT)) {
+            sql.append(" AND price > ?");
+            params.add(priceGT);
+        }
+        if (Objects.nonNull(priceLT)) {
+            sql.append(" AND price < ?");
+            params.add(priceLT);
+        }
+        if (Objects.nonNull(available)) {
+            sql.append(" AND available = ?");
+            params.add(available);
+        }
+        if (Objects.nonNull(limit)) {
+            sql.append(" LIMIT ?");
+            params.add(limit);
+        }
+
+        return jdbcTemplate.query(sql.toString(), rowMapper, params.toArray());
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.artyom.romashkako.product.service;
 
 import com.artyom.romashkako.product.data.ProductRepository;
+import com.artyom.romashkako.product.data.SearchCriteriaProductRepository;
 import com.artyom.romashkako.product.dto.ProductRequest;
 import com.artyom.romashkako.product.dto.ProductResponse;
 import com.artyom.romashkako.common.exception.NotFoundException;
@@ -14,7 +15,7 @@ import java.util.List;
 public class DefaultProductService implements ProductService {
 
     private final ProductRepository productRepository;
-
+    private final SearchCriteriaProductRepository criteriaProductRepository;
     private final ProductMapper productMapper;
 
     @Override
@@ -33,6 +34,13 @@ public class DefaultProductService implements ProductService {
     @Override
     public List<ProductResponse> fetchAll() {
         return productRepository.findAll().stream()
+                .map(productMapper::getProductResponse)
+                .toList();
+    }
+
+    @Override
+    public List<ProductResponse> findByCriteria(String title, double priceGT, double priceGL, boolean available, int limit) {
+        return criteriaProductRepository.findByCriteria(title, priceGT, priceGT, available, limit).stream()
                 .map(productMapper::getProductResponse)
                 .toList();
     }

@@ -1,6 +1,7 @@
 package com.artyom.romashkako.product.service;
 
 import com.artyom.romashkako.product.data.ProductRepository;
+import com.artyom.romashkako.product.data.SearchCriteriaProductRepository;
 import com.artyom.romashkako.product.dto.ProductRequest;
 import com.artyom.romashkako.product.dto.ProductResponse;
 import com.artyom.romashkako.product.mapper.ProductMapper;
@@ -12,8 +13,8 @@ import java.util.List;
 @Service
 public class TransactionalProductRepository extends DefaultProductService {
 
-    public TransactionalProductRepository(ProductRepository productRepository, ProductMapper productMapper) {
-        super(productRepository, productMapper);
+    public TransactionalProductRepository(ProductRepository productRepository, SearchCriteriaProductRepository criteriaProductRepository, ProductMapper productMapper) {
+        super(productRepository, criteriaProductRepository, productMapper);
     }
 
     @Override
@@ -41,7 +42,15 @@ public class TransactionalProductRepository extends DefaultProductService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<ProductResponse> findByCriteria(String title, double priceGT, double priceGL, boolean available, int limit) {
+        return super.findByCriteria(title, priceGT, priceGL, available, limit);
+    }
+
+    @Override
+    @Transactional
     public void deleteById(Integer id) {
         super.deleteById(id);
     }
+
 }
