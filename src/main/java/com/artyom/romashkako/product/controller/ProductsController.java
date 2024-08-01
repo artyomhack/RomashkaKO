@@ -53,7 +53,7 @@ public class ProductsController {
                                                 @RequestParam(name = "priceLt", required = false) Double priceLt,
                                                 @RequestParam(name = "available", required = false, defaultValue = "true") Boolean available,
                                                 @RequestParam(name = "limit", required = false) Integer limit,
-                                                @RequestParam(name = "sortBy", required = false) String sort) {
+                                                @RequestParam(name = "sortBy", required = false ) String sort) {
 
         return productService.findByCriteria(title, priceGt, priceLt, available, limit, sort);
     }
