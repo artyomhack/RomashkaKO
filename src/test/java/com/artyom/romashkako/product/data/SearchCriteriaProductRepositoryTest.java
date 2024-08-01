@@ -1,5 +1,6 @@
 package com.artyom.romashkako.product.data;
 
+import com.artyom.romashkako.product.dto.ProductResponse;
 import com.artyom.romashkako.product.model.Product;
 import com.artyom.romashkako.product.utils.ProductUtils;
 import org.assertj.core.util.Arrays;
@@ -91,9 +92,39 @@ class SearchCriteriaProductRepositoryTest {
     }
 
     @Test
-    public void shouldReturnProductByCriteriaWhereLimitIsOne_whereUseOneFilter() {
+    public void shouldReturnProductByCriteriaLimitIsOne_whereUseOneFilter() {
         var expectSize = 1;
         var actualSize = criteriaProductRepository.findByCriteria(null, null, null, null, 1).size();
         assertEquals(expectSize, actualSize);
+    }
+
+    @Test
+    public void shouldReturnProductByCriteriaTitleAndPriceGreatThan_whereUseMultiFilters() {
+        var expectTitle = Arrays.array("Розы", "Рогоз");
+        var expectPrice = Arrays.array(59.99, 34.79);
+        var expectAvailable = Arrays.array(true, false);
+        var expectSize = 2;
+
+        var actual = criteriaProductRepository.findByCriteria("Ро", 29.99, null, null, null);
+        var actualSize = actual.size();
+
+        assertEquals(expectSize, actualSize);
+        assertThat(actual).extracting(Product::getTitle).containsOnly(expectTitle);
+        assertThat(actual).extracting(Product::getPrice).containsOnly(expectPrice);
+        assertThat(actual).extracting(Product::isAvailable).containsOnly(expectAvailable);
+    }
+
+    @Test
+    public void shouldReturnProductByCriteriaPriceLessThanAndAvailableIsFalseAndLimit_whereUseMultiFilters() {
+        var expectPrice = Arrays.array(34.79, 144.99);
+        var expectAvailable = Arrays.array(false, false);
+        var expectSize = 2;
+
+        var actual = criteriaProductRepository.findByCriteria(null, null, 145.00, false, 2);
+        var actualSize = actual.size();
+
+        assertEquals(expectSize, actualSize);
+        assertThat(actual).extracting(Product::getPrice).containsOnly(expectPrice);
+        assertThat(actual).extracting(Product::isAvailable).containsOnly(expectAvailable);
     }
 }
