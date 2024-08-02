@@ -125,7 +125,9 @@ public class JdbcProductRepository implements ProductRepository, SearchCriteriaP
             case NON -> sql.append(" ORDER BY id;");
         }
 
-        return jdbcTemplate.query(sql.toString(), rowMapper, params);
+        return params.isEmpty() ?
+                jdbcTemplate.query(sql.toString(), rowMapper) :
+                jdbcTemplate.query(sql.toString(), rowMapper, params);
     }
 
 }

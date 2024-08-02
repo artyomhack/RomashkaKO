@@ -17,7 +17,7 @@ import java.util.*;
 @TestComponent
 public class ProductUtils {
 
-    final static Random RANDOM = new Random();
+    private final static Random RANDOM = new Random();
 
     @Autowired
     private ProductRepository productRepository;
@@ -82,6 +82,23 @@ public class ProductUtils {
         } catch (UnsupportedEncodingException | JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public List<Product> getProductForSorting() {
+        return List.of(
+                new Product(1, Character.toString(RANDOM.nextInt(64, 90)), "MyDescription number " + RANDOM.nextInt(),
+                        RANDOM.nextDouble(0.0, 250.0), RANDOM.nextBoolean()),
+                new Product(1, Character.toString(RANDOM.nextInt(64, 90)), "MyDescription number " + RANDOM.nextInt(),
+                        RANDOM.nextDouble(0.0, 250.0), RANDOM.nextBoolean()),
+                new Product(1, Character.toString(RANDOM.nextInt(64, 90)), "MyDescription number " + RANDOM.nextInt(),
+                        RANDOM.nextDouble(0.0, 250.0), RANDOM.nextBoolean()),
+                new Product(1, Character.toString(RANDOM.nextInt(64, 90)), "MyDescription number " + RANDOM.nextInt(),
+                        RANDOM.nextDouble(0.0, 250.0), RANDOM.nextBoolean()),
+                new Product(1, Character.toString(RANDOM.nextInt(64, 90)), "MyDescription number " + RANDOM.nextInt(),
+                        RANDOM.nextDouble(0.0, 250.0), RANDOM.nextBoolean()),
+                new Product(1, Character.toString(RANDOM.nextInt(64, 90)), "MyDescription number " + RANDOM.nextInt(),
+                        RANDOM.nextDouble(0.0, 250.0), RANDOM.nextBoolean())
+        );
     }
 }
 

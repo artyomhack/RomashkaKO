@@ -1,23 +1,22 @@
 package com.artyom.romashkako.product.data;
 
-import com.artyom.romashkako.product.dto.ProductResponse;
+import com.artyom.romashkako.common.enums.TypeSort;
 import com.artyom.romashkako.product.model.Product;
 import com.artyom.romashkako.product.utils.ProductUtils;
 import org.assertj.core.util.Arrays;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
 @SpringBootTest
 @Transactional
@@ -126,5 +125,133 @@ class SearchCriteriaProductRepositoryTest {
         assertEquals(expectSize, actualSize);
         assertThat(actual).extracting(Product::getPrice).containsOnly(expectPrice);
         assertThat(actual).extracting(Product::isAvailable).containsOnly(expectAvailable);
+    }
+
+    @Test
+    public void shouldSortingProductByTitleDesc_whereUseOnlySort() {
+        productRepository.findAll().forEach(it -> productRepository.deleteProductById(it.getId()));
+
+        var list = productUtils.getProductForSorting();
+        list.forEach(productRepository::create);
+
+        var expectTitles = list.stream()
+                .map(Product::getTitle)
+                .sorted(Comparator.reverseOrder())
+                .toList();
+
+        var actualTitles = criteriaProductRepository.findByCriteria(null,null,null,null,null, TypeSort.TITLE_DESC).stream()
+                .map(Product::getTitle)
+                .toList();
+
+        assertIterableEquals(expectTitles, actualTitles);
+    }
+
+    @Test
+    public void shouldSortingProductByTitleAsc_whereUseOnlySort() {
+        productRepository.findAll().forEach(it -> productRepository.deleteProductById(it.getId()));
+
+        var list = productUtils.getProductForSorting();
+        list.forEach(productRepository::create);
+
+        var expectTitles = list.stream()
+                .map(Product::getTitle)
+                .sorted(Comparator.naturalOrder())
+                .toList();
+
+        var actualTitles = criteriaProductRepository.findByCriteria(null,null,null,null,null, TypeSort.TITLE_ASC).stream()
+                .map(Product::getTitle)
+                .toList();
+
+        assertIterableEquals(expectTitles, actualTitles);
+    }
+
+    @Test
+    public void shouldSortingProductByTitleDesc_whereUseOnlySort_whenProductsIsEmpty() {
+        productRepository.findAll().forEach(it -> productRepository.deleteProductById(it.getId()));
+
+        var expectTitles = Collections.EMPTY_LIST;
+
+        var actualTitles = criteriaProductRepository.findByCriteria(null,null,null,null,null, TypeSort.TITLE_DESC).stream()
+                .map(Product::getTitle)
+                .toList();
+
+        assertIterableEquals(expectTitles, actualTitles);
+    }
+
+    @Test
+    public void shouldSortingProductByTitleAsc_whereUseOnlySort_whenProductsIsEmpty() {
+        productRepository.findAll().forEach(it -> productRepository.deleteProductById(it.getId()));
+
+        var expectTitles = Collections.EMPTY_LIST;
+
+        var actualTitles = criteriaProductRepository.findByCriteria(null,null,null,null,null, TypeSort.TITLE_ASC).stream()
+                .map(Product::getTitle)
+                .toList();
+
+        assertIterableEquals(expectTitles, actualTitles);
+    }
+
+    @Test
+    public void shouldSortingProductByPriceDown_whereUseOnlySort() {
+        productRepository.findAll().forEach(it -> productRepository.deleteProductById(it.getId()));
+
+        var list = productUtils.getProductForSorting();
+        list.forEach(productRepository::create);
+
+        var expectPrices = list.stream()
+                .map(Product::getPrice)
+                .sorted(Comparator.reverseOrder())
+                .toList();
+
+        var actualPrices = criteriaProductRepository.findByCriteria(null,null,null,null,null, TypeSort.PRICE_DOWN).stream()
+                .map(Product::getPrice)
+                .toList();
+
+        assertIterableEquals(expectPrices, actualPrices);
+    }
+
+    @Test
+    public void shouldSortingProductByPriceUp_whereUseOnlySort() {
+        productRepository.findAll().forEach(it -> productRepository.deleteProductById(it.getId()));
+
+        var list = productUtils.getProductForSorting();
+        list.forEach(productRepository::create);
+
+        var expectPrices = list.stream()
+                .map(Product::getPrice)
+                .sorted(Comparator.naturalOrder())
+                .toList();
+
+        var actualPrices = criteriaProductRepository.findByCriteria(null,null,null,null,null, TypeSort.PRICE_UP).stream()
+                .map(Product::getPrice)
+                .toList();
+
+        assertIterableEquals(expectPrices, actualPrices);
+    }
+
+    @Test
+    public void shouldSortingProductByPriceUp_whereUseOnlySort_whenProductsIsEmpty() {
+        productRepository.findAll().forEach(it -> productRepository.deleteProductById(it.getId()));
+
+        var expectPrices = Collections.EMPTY_LIST;
+
+        var actualPrices = criteriaProductRepository.findByCriteria(null,null,null,null,null, TypeSort.PRICE_UP).stream()
+                .map(Product::getPrice)
+                .toList();
+
+        assertIterableEquals(expectPrices, actualPrices);
+    }
+
+    @Test
+    public void shouldSortingProductByPriceDown_whereUseOnlySort_whenProductsIsEmpty() {
+        productRepository.findAll().forEach(it -> productRepository.deleteProductById(it.getId()));
+
+        var expectPrices = Collections.EMPTY_LIST;
+
+        var actualPrices = criteriaProductRepository.findByCriteria(null,null,null,null,null, TypeSort.PRICE_DOWN).stream()
+                .map(Product::getPrice)
+                .toList();
+
+        assertIterableEquals(expectPrices, actualPrices);
     }
 }
