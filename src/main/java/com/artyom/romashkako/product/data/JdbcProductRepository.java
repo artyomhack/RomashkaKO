@@ -112,22 +112,21 @@ public class JdbcProductRepository implements ProductRepository, SearchCriteriaP
             sql.append(" AND available = ?");
             params.add(available);
         }
+
+        switch (sort) {
+            case TITLE_DESC -> sql.append(" ORDER BY title DESC");
+            case TITLE_ASC -> sql.append(" ORDER BY title ASC");
+            case PRICE_DOWN -> sql.append(" ORDER BY price DESC");
+            case PRICE_UP ->  sql.append(" ORDER BY price ASC");
+            case NON -> sql.append(" ORDER BY id");
+        }
+
         if (Objects.nonNull(limit)) {
             sql.append(" LIMIT ?");
             params.add(limit);
         }
 
-        switch (sort) {
-            case TITLE_DESC -> sql.append(" ORDER BY title DESC;");
-            case TITLE_ASC -> sql.append(" ORDER BY title ASC;");
-            case PRICE_DOWN -> sql.append(" ORDER BY price DESC;");
-            case PRICE_UP ->  sql.append(" ORDER BY price ASC;");
-            case NON -> sql.append(" ORDER BY id;");
-        }
-
-        return params.isEmpty() ?
-                jdbcTemplate.query(sql.toString(), rowMapper) :
-                jdbcTemplate.query(sql.toString(), rowMapper, params);
+        return jdbcTemplate.query(sql.toString(), rowMapper, params.toArray());
     }
 
 }

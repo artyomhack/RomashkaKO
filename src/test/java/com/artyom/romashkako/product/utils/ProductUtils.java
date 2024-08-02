@@ -88,15 +88,15 @@ public class ProductUtils {
         return List.of(
                 new Product(1, Character.toString(RANDOM.nextInt(64, 90)), "MyDescription number " + RANDOM.nextInt(),
                         RANDOM.nextDouble(0.0, 250.0), RANDOM.nextBoolean()),
-                new Product(1, Character.toString(RANDOM.nextInt(64, 90)), "MyDescription number " + RANDOM.nextInt(),
+                new Product(2, Character.toString(RANDOM.nextInt(64, 90)), "MyDescription number " + RANDOM.nextInt(),
                         RANDOM.nextDouble(0.0, 250.0), RANDOM.nextBoolean()),
-                new Product(1, Character.toString(RANDOM.nextInt(64, 90)), "MyDescription number " + RANDOM.nextInt(),
+                new Product(3, Character.toString(RANDOM.nextInt(64, 90)), "MyDescription number " + RANDOM.nextInt(),
                         RANDOM.nextDouble(0.0, 250.0), RANDOM.nextBoolean()),
-                new Product(1, Character.toString(RANDOM.nextInt(64, 90)), "MyDescription number " + RANDOM.nextInt(),
+                new Product(4, Character.toString(RANDOM.nextInt(64, 90)), "MyDescription number " + RANDOM.nextInt(),
                         RANDOM.nextDouble(0.0, 250.0), RANDOM.nextBoolean()),
-                new Product(1, Character.toString(RANDOM.nextInt(64, 90)), "MyDescription number " + RANDOM.nextInt(),
+                new Product(5, Character.toString(RANDOM.nextInt(64, 90)), "MyDescription number " + RANDOM.nextInt(),
                         RANDOM.nextDouble(0.0, 250.0), RANDOM.nextBoolean()),
-                new Product(1, Character.toString(RANDOM.nextInt(64, 90)), "MyDescription number " + RANDOM.nextInt(),
+                new Product(6, Character.toString(RANDOM.nextInt(64, 90)), "MyDescription number " + RANDOM.nextInt(),
                         RANDOM.nextDouble(0.0, 250.0), RANDOM.nextBoolean())
         );
     }
